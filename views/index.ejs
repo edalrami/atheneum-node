@@ -32,19 +32,23 @@ limitations under the License.
   <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase-storage.js"></script>
+  
+  <!-- JQUERY -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
-   <script>
-//     // Initialize Firebase
-//     var config = {
-//       apiKey: "AIzaSyBOJvDo2IEUWTT60Yy9RMKu8cPXCxiOa5k",
-//       authDomain: "atheneum-test.firebaseapp.com",
-//       databaseURL: "https://atheneum-test.firebaseio.com",
-//       projectId: "atheneum-test",
-//       storageBucket: "atheneum-test.appspot.com",
-//       messagingSenderId: "289616228469"
-//     };
-//     firebase.initializeApp(config);
-  </script>
+<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyB-StGhM37us-nn-6X4GAcOk1gf7HfWQgc",
+    authDomain: "atheneum-91b27.firebaseapp.com",
+    databaseURL: "https://atheneum-91b27.firebaseio.com",
+    projectId: "atheneum-91b27",
+    storageBucket: "atheneum-91b27.appspot.com",
+    messagingSenderId: "541428318220"
+  };
+  firebase.initializeApp(config);
+</script>
 
 </head>
 <body>
@@ -54,7 +58,7 @@ limitations under the License.
     <header class="mdl-layout__header mdl-color-text--white mdl-color--light-blue-700">
       <div class="mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-grid">
         <div class="mdl-layout__header-row mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--8-col-desktop">
-          <h3>Atheneum Filesharing ye</h3>
+          <h3>Atheneum Filesharing</h3>
         </div>
       </div>
     </header>
@@ -70,7 +74,9 @@ limitations under the License.
           <div class="mdl-card__supporting-text mdl-color-text--grey-600" id="messagesDiv">
             <p>Select a file below. When it is uploaded it will be added to the list of files displayed below.</p>
             <h6>Choose File</h6>
-            <input type="file" id="file" name="file"/>
+            <input type="file" id="fileInput" name="fileInput"/>
+            <br><br>
+            <input type="button" id="submitButton" value="SUBMIT">
             <h6>File URL:</h6>
             <span id="linkbox"></span>
           </div>
@@ -78,59 +84,38 @@ limitations under the License.
       </div>
     </main>
   </div>
+
+  
  <script>
-//     var auth = firebase.auth();
-//     var database = firebase.database();
-//     var storage = firebase.storage();
-//     var storageRef = storage.ref();
-//     //Create a reference to a lower section:
-//     var images_ref = storageRef.child('images/');
-//     var file_ref = images_ref.child('Cavatar.jpg');
-//     console.log("Images ref points to: " + file_ref.fullPath);
-
-//     function handleFileSelect(evt) {
-//       evt.stopPropagation();
-//       evt.preventDefault();
-//       var file = evt.target.files[0];
-
-//       var metadata = {
-//         'contentType': file.type
-//       };
-
-//       // Push to child path.
-//       // [START oncomplete]
-//       storageRef.child('images/' + file.name).put(file, metadata).then(function(snapshot) {
-//         console.log('Uploaded', snapshot.totalBytes, 'bytes.');
-//         console.log(snapshot.metadata);
-//         var url = snapshot.downloadURL;
-//         console.log('File available at', url);
-//         // [START_EXCLUDE]
-//         document.getElementById('linkbox').innerHTML = '<a href="' +  url + '">Uploaded File</a>';
-//         // [END_EXCLUDE]
-//       }).catch(function(error) {
-//         // [START onfailure]
-//         console.error('Upload failed:', error);
-//         // [END onfailure]
-//       });
-//       // [END oncomplete]
-//     }
-
-//     window.onload = function() {
-       
-//       document.getElementById('file').addEventListener('change', handleFileSelect, false);
-//       document.getElementById('file').disabled = true;
-
-//       auth.onAuthStateChanged(function(user) {
-//         if (user) {
-//           console.log('Anonymous user signed-in.', user);
-//           document.getElementById('file').disabled = false;
-//         } else {
-//           console.log('There was no anonymous session. Creating a new anonymous user.');
-//           // Sign the user in anonymously since accessing Storage requires the user to be authorized.
-//           auth.signInAnonymously();
-//         }
-//       });
-//     }
+    $(document).ready(function() {
+        var storage = firebase.storage();
+        var storageRef = storage.ref();
+        var fileToUpload
+        var uploadRef
+        
+        
+        function uploadToFirebase(file) {
+            uploadRef = storageRef.child("testUploads/"+file.name)
+            
+            console.log(fileToUpload)
+            
+            return uploadRef.put(file).then(function(snapshot) {
+                console.log("NEW DOWNLOAD URL: "+snapshot.downloadURL)
+                $("#linkbox").html(snapshot.downloadURL)
+            })
+        } 
+        
+        
+        $("#submitButton").click(function() {
+            if($("#fileInput").val()) { 
+                fileToUpload = document.querySelector("[name='fileInput']").files[0]
+                uploadToFirebase(fileToUpload)
+                
+            }
+        })
+        
+    })
+    
    </script>
 </body>
 </html>

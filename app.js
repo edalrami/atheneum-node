@@ -25,7 +25,8 @@ const app = express()
 
 // Define routes
 const routes = {
-    main: require("./routes/main.js")
+    main: require("./routes/main.js"),
+    functions: require("./routes/functions.js")
 }
 
 // Set apps listening port
@@ -86,11 +87,11 @@ app.use(function(req, res, next) {
 
 // GET REQUESTS (Page rendering, redirects, other non-database-modifying functions)
 app.get('/', routes.main.index )
-
+app.get('/signUp', routes.main.signUpPage)
 
 
 // POST REQUESTS
-// app.post('/postURLExample', routes.functions.test)
+// app.post('/postURLExample', routes.functions.test) <-- add verifyUserLogin here
 
 
 const server = app.listen(app.get('port'), () => {

@@ -3,3 +3,11 @@ module.exports.index = function(req, res) {
         template : "index"
     })
 }
+
+module.exports.signUpPage = function(req, res) {
+    return res.renderT("signUp", {
+        template: "signUp"
+    })
+}
+
+//
