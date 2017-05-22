@@ -1,8 +1,8 @@
 
 Note: This contract address and JSON interface are input fields to interact with the current contract
-deployed onto the Ethereum testnet blockchain. Current functionality of the contract will transfer 1*10^(-17) ether
+deployed onto the Ethereum testnet blockchain. Current functionality of the contract will transfer 1*10^(-17) ether to
 a specified wallet address. When executing the contract do NOT enter ether amount in the send input field. Leave it blank, or else 
-you'll be sending Ether to the address of the contract and the specified address. 
+you'll be sending Ether to the address of the contract and the specified address. Only fill in the input fields for the get Uploader function.
 
 Contract Address:
 0x2e16bfa0fD6F116B4F9C9785916342920070D90B
