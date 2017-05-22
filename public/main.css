@@ -25,9 +25,12 @@ html, body {
   padding: 0;
 }
 h3 {
-  background: url('firebase-logo.png') no-repeat;
-  background-size: 40px;
+  background: url('ath1.png') no-repeat;
+  font-family: sans-serif;
+  font-weight: bold;
+  background-size: 45px;
   padding-left: 50px;
+  padding-bottom: 15px;
 }
 
 body.signin {

@@ -1,10 +1,17 @@
 pragma solidity 0.4.8;
+
+//Contract is highest object that can be declared in solidity
 contract mortal{
+
+	//Contract will not be deployed to blockchain, unless owner address is saved
 
 	address public owner;
 	function mortal(){
+		//Set owner to the sender of this contract
 		owner = msg.sender;
 	}
+	
+	//Creaete function modifier onlyOwner and assign owner to the contract creator
 	modifier onlyOwner{
 		if (msg.sender != owner){
 			throw;
@@ -12,38 +19,36 @@ contract mortal{
 			_;
 		}
 	}
+
+	//Only the owner of this contract can kill it
 	function kill() onlyOwner{
 		suicide(owner);
 	}
 }
 
-contract download_request is mortal{
-    //leftover test code
-	string public userName;
-	//variables
-	uint256 cost = 1;
-	address downloader;
-	address uploader;
-	bool transfer_success;
-	//Constructor leftover from test
-	function download_request(string _name){
-		userName = _name;
+contract getUploader is mortal{
+    
+	mapping(address=>Uploader) public uploaders;
+
+	struct Uploader{
+		bool active;
+		uint256 cost;
 	}
-	//Funcionality to transfer ether in order to download a file
-	//Arguments: The address of the file owner who will be paid
-	function pay(address _ul){
-	    //Check if there are enough funds to download
-	    if(msg.sender.balance < cost) {
-	        throw;
-	    }
-	    else{
-	        uploader = _ul;
-	        //Send() returns a bool if it was successful
-	        transfer_success = uploader.send(cost);
-	    }
-	    //Check for any errors in the transfer
-	    if(!transfer_success) {
-	        throw;
+
+    //Note: cost is set to 1 which is the equivalent of 1*10^(-17) ether
+    //This is to test the payments of microtransactions. Cost is subject to change
+    //after further testing
+	function getUploader(address _uploaderAddress){
+		uploaders[_uploaderAddress] = Uploader({
+		active: true,
+		cost: 1
+		});
+	}
+
+	function pay(address _uploaderAddress) payable{
+
+	    if(!_uploaderAddress.send(uploadersp[_uploaderAddress].cost)){
+	    	throw;
 	    }
 	}
 }
