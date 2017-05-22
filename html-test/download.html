@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2016 Google Inc.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+<head>
+    <meta charset=utf-8 />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atheneum Filesharing- Browse</title>
+
+    <!-- Material Design Theming -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-yellow.min.css" />
+    <link rel="stylesheet" href="/main.css">
+
+    <!--link rel="stylesheet" href="/main.css">
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase-storage.js"></script>
+
+    <!-- JQUERY -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyB-StGhM37us-nn-6X4GAcOk1gf7HfWQgc",
+            authDomain: "atheneum-91b27.firebaseap.com",
+            databaseURL: "https://atheneum-91b27.firebaseio.com",
+            projectId: "atheneum-91b27",
+            storageBucket: "atheneum-91b27.appspot.com",
+            messagingSenderId: "541428318220"
+        };
+        firebase.initializeApp(config);
+    </script>
+
+</head>
+<body>
+<!-- Simple header with scrollable tabs. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header mdl-color-text--yellow-A700 mdl-color--blue-grey-800">
+        <div class="mdl-layout__header-row">
+            <!-- Title -->
+            <span class="mdl-layout-title mdl-color-text--yellow-A700">Atheneum</span>
+        </div>
+        <!-- Tabs -->
+        <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+            <a href="#scroll-tab-1" class="mdl-layout__tab is-active mdl-color-text--yellow-A700">All</a>
+            <a href="#scroll-tab-2" class="mdl-layout__tab mdl-color-text--yellow-A700">History</a>
+            <a href="#scroll-tab-3" class="mdl-layout__tab mdl-color-text--yellow-A700">Literature</a>
+            <a href="#scroll-tab-4" class="mdl-layout__tab mdl-color-text--yellow-A700">Chemistry</a>
+            <a href="#scroll-tab-5" class="mdl-layout__tab mdl-color-text--yellow-A700">Music</a>
+            <a href="#scroll-tab-6" class="mdl-layout__tab mdl-color-text--yellow-A700">Art</a>
+        </div>
+    </header>
+    <style type='text/css'>
+
+        .mdl-layout .mdl-layout__drawer-button {
+            color: #FFD600;
+        }
+    </style>
+    <div class="mdl-layout__drawer mdl-color-text--yellow-A700 mdl-color--blue-grey-800">
+        <span class="mdl-layout-title mdl-color-text--yellow-A700">Atheneum</span>
+        <nav class="mdl-navigation">
+            <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="upload.html">Upload</a>
+            <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="download.html">Browse Files</a>
+            <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="index.html">My Account</a>
+            <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="">Sign Out</a>
+        </nav>
+    </div>
+    <main class="mdl-layout__content">
+        <section class="mdl-layout__tab-panel is-active mdl-color-text--yellow-A700 mdl-color--blue-grey-800" id="scroll-tab-1">
+            <div class="page-content"><!-- Your content goes here --></div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-2">
+            <div class="page-content"><!-- Your content goes here --></div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-3">
+            <div class="page-content"><!-- Your content goes here --></div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-4">
+            <div class="page-content"><!-- Your content goes here --></div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-5">
+            <div class="page-content"><!-- Your content goes here --></div>
+        </section>
+        <section class="mdl-layout__tab-panel" id="scroll-tab-6">
+            <div class="page-content"><!-- Your content goes here --></div>
+        </section>
+    </main>
+</div>
+<script>
+    $(document).ready(function() {
+        var storage = firebase.storage();
+        var storageRef = storage.ref();
+        var fileToUpload
+        var uploadRef
+
+
+        function uploadToFirebase(file) {
+            uploadRef = storageRef.child("testUploads/"+file.name)
+
+            console.log(fileToUpload)
+
+            return uploadRef.put(file).then(function(snapshot) {
+                console.log("NEW DOWNLOAD URL: "+snapshot.downloadURL)
+                $("#linkbox").html(snapshot.downloadURL)
+            })
+        }
+
+
+        $("#submitButton").click(function() {
+            if($("#fileInput").val()) {
+                fileToUpload = document.querySelector("[name='fileInput']").files[0]
+                uploadToFirebase(fileToUpload)
+
+            }
+        })
+
+    })
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
