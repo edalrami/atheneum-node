@@ -94,13 +94,10 @@ limitations under the License.
     var file_list = document.getElementById('file_list');
     var auth = firebase.auth();
     var database = firebase.database();
+    //db_ref points to the file tab in the DB
     var db_ref = database.ref("files");
     var storage = firebase.storage();
     var storageRef = storage.ref();
-    //Create a reference to a lower section:
-    var images_ref = storageRef.child('images/');
-    var file_ref = images_ref.child('Cavatar.jpg');
-    console.log("Images ref points to: " + file_ref.fullPath);
 
     function handleFileSelect(evt) {
       evt.stopPropagation();
@@ -118,6 +115,7 @@ limitations under the License.
         console.log(snapshot.metadata);
         var url = snapshot.downloadURL;
         var new_entry_ref = db_ref.push();
+        //Default DB entry
         new_entry_ref.set({
           'name': file.name,
           'loc': url,
@@ -129,7 +127,7 @@ limitations under the License.
         database.ref()
         // [START_EXCLUDE]
         document.getElementById('linkbox').innerHTML = '<a href="' +  url + '">Uploaded File</a>';
-        file_list.innerHTML = file_list.innerHTML + '<a href="' + url + '">' + file.name;
+        file_list.innerHTML = file_list.innerHTML + '<a href="' + url + '">' + file.name;        
         file_list.innerHTML = file_list.innerHTML + '<br>';
         //document.getElementById('file_list').innerHTML = '<a href="' +  url + '">Uploaded File</a>';
         // [END_EXCLUDE]
@@ -141,13 +139,20 @@ limitations under the License.
       // [END oncomplete]
     }
 
+    //Display list of files uploaded
     window.onload = function() {
-      //Display the entire file list here:
-      // Basic usage of .once() to read the data located at ref.
+    //.once polls the database one time
     db_ref.once('value').then(function(snapshot) {
+      //go through each element from the 'files' tab in the DB
       snapshot.forEach(function(child) {
         var child_key = child.key;
         var child_data = child.val();
+        //add buttons
+        file_list.innerHTML = file_list.innerHTML + '<button class="vote" id="up" value="off"> + </button>';
+        file_list.innerHTML = file_list.innerHTML + '&nbsp; &nbsp;';
+        file_list.innerHTML = file_list.innerHTML + '<button class="vote" id="down" value="off"> - </button>';
+        file_list.innerHTML = file_list.innerHTML + '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;';
+        //display the file names and have them link to their cloud storage location
         file_list.innerHTML = file_list.innerHTML + '<a href="' + child_data.loc + '">' + child_data.name;
         file_list.innerHTML = file_list.innerHTML + '<br>';
       })
