@@ -95,7 +95,7 @@ limitations under the License.
     var auth = firebase.auth();
     var database = firebase.database();
     //db_ref points to the file tab in the DB
-    var db_ref = database.ref("files");
+    var db_ref = database.ref("files").orderByChild('upvotes');
     var storage = firebase.storage();
     var storageRef = storage.ref();
 
@@ -147,10 +147,14 @@ limitations under the License.
       snapshot.forEach(function(child) {
         var child_key = child.key;
         var child_data = child.val();
+        //console.log(child.val());
         //add buttons
-        file_list.innerHTML = file_list.innerHTML + '<button class="vote" id="up" value="off"> + </button>';
-        file_list.innerHTML = file_list.innerHTML + '&nbsp; &nbsp;';
-        file_list.innerHTML = file_list.innerHTML + '<button class="vote" id="down" value="off"> - </button>';
+        var up = "up";
+        var down = "down";
+        //orderByChild by default orders the DB in ascending order, so as the votecount increases, it will move down the list
+        file_list.innerHTML = file_list.innerHTML + "<button class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, -1)\"> + </button>";
+        file_list.innerHTML = file_list.innerHTML + "&nbsp; &nbsp;";
+        file_list.innerHTML = file_list.innerHTML + "<button class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, 1)\"> - </button>";
         file_list.innerHTML = file_list.innerHTML + '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;';
         //display the file names and have them link to their cloud storage location
         file_list.innerHTML = file_list.innerHTML + '<a href="' + child_data.loc + '">' + child_data.name;
@@ -162,14 +166,31 @@ limitations under the License.
 
       auth.onAuthStateChanged(function(user) {
         if (user) {
-          console.log('Anonymous user signed-in.', user);
+          //console.log('Anonymous user signed-in.', user);
           document.getElementById('file').disabled = false;
         } else {
-          console.log('There was no anonymous session. Creating a new anonymous user.');
+          //console.log('There was no anonymous session. Creating a new anonymous user.');
           // Sign the user in anonymously since accessing Storage requires the user to be authorized.
           auth.signInAnonymously();
         }
       });
+    }
+
+    function vote(key, vote){
+      var db_ref = firebase.database().ref("files/"+key);
+      db_ref.once("value").then(function(snapshot) {
+        var new_count = snapshot.val().upvotes + vote; // {first:"Ada",last:"Lovelace"}
+        console.log(new_count);
+        db_ref.set({
+          'name': snapshot.val().name,
+          'loc': snapshot.val().loc,
+          'owner': snapshot.val().owner,
+          'category': snapshot.val().category,
+          upvotes: new_count
+        });
+        console.log(snapshot.val().upvotes);
+  });
+      
     }
   </script>
 </body>
