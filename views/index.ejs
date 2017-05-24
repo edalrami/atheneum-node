@@ -32,6 +32,7 @@ limitations under the License.
   <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase-storage.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
   
   <!-- JQUERY -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -73,6 +74,12 @@ limitations under the License.
           </div>
           <div class="mdl-card__supporting-text mdl-color-text--grey-600" id="messagesDiv">
             <p>Select a file below. When it is uploaded it will be added to the list of files displayed below.</p>
+            
+            <div id="file_list">
+              <p> Uploaded files: </p>
+            </div>
+            
+            
             <h6>Choose File</h6>
             <input type="file" id="fileInput" name="fileInput"/>
             <br><br>
@@ -90,8 +97,14 @@ limitations under the License.
     $(document).ready(function() {
         var storage = firebase.storage();
         var storageRef = storage.ref();
+        var auth = firebase.auth();
+        var database = firebase.database();
+        var db_ref = database.ref("files").orderByChild('upvotes');
+        
         var fileToUpload
         var uploadRef
+        
+        
         
         
         function uploadToFirebase(file) {
@@ -103,16 +116,101 @@ limitations under the License.
                 console.log("NEW DOWNLOAD URL: "+snapshot.downloadURL)
                 $("#linkbox").html(snapshot.downloadURL)
             })
-        } 
+        }
+        
+        function handleFileSelect(file){
+          //evt.stopPropagation();
+          //evt.preventDefault();
+          //var file = evt.target.files[0];
+
+          var metadata = {
+            'contentType': file.type
+          };
+          
+          uploadRef = storageRef.child("testUploads/"+file.name);
+          
+          return uploadRef.put(file, metadata).then(function(snapshot) {
+            console.log('Uploaded', snapshot.totalBytes, 'bytes.');
+            console.log(snapshot.metadata);
+            
+            var url = snapshot.downloadURL;
+             $("#linkbox").html(url);
+            var new_entry_ref = database.ref("files").push();
+            //Default DB entry
+            new_entry_ref.set({
+              'name': file.name,
+              'loc': url,
+              'upvotes': 0,
+              'owner': 'nikola',
+              'category': 'yolo'
+            });
+            console.log('File available at', url);
+            database.ref()
+            // [START_EXCLUDE]
+            $('#linkbox').html('<a href="' +  url + '">Uploaded File</a>');
+            file_list.innerHTML = file_list.innerHTML + '<a href="' + url + '">' + file.name;        
+            file_list.innerHTML = file_list.innerHTML + '<br>';
+            //document.getElementById('file_list').innerHTML = '<a href="' +  url + '">Uploaded File</a>';
+            // [END_EXCLUDE]
+          }).catch(function(error) {
+          // [START onfailure]
+          console.error('Upload failed:', error);
+          // [END onfailure]
+          });
+          // [END oncomplete]
+        }
         
         
         $("#submitButton").click(function() {
             if($("#fileInput").val()) { 
-                fileToUpload = document.querySelector("[name='fileInput']").files[0]
-                uploadToFirebase(fileToUpload)
+                fileToUpload = document.querySelector("[name='fileInput']").files[0];
+                //uploadToFirebase(fileToUpload)
+                handleFileSelect(fileToUpload);
                 
             }
         })
+        
+        
+         window.onload = function() {
+            //.once polls the database one time
+            db_ref.once('value').then(function(snapshot) {
+            //go through each element from the 'files' tab in the DB
+            snapshot.forEach(function(child) {
+              var child_key = child.key;
+              var child_data = child.val();
+              //console.log(child.val());
+              //add buttons
+              var up = "up";
+              var down = "down";
+              //orderByChild by default orders the DB in ascending order, so as the votecount increases, it will move down the list
+              file_list.innerHTML = file_list.innerHTML + "<button class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, -1)\"> + </button>";
+              file_list.innerHTML = file_list.innerHTML + "&nbsp; &nbsp;";
+              file_list.innerHTML = file_list.innerHTML + "<button class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, 1)\"> - </button>";
+              file_list.innerHTML = file_list.innerHTML + '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;';
+              //display the file names and have them link to their cloud storage location
+              file_list.innerHTML = file_list.innerHTML + '<a href="' + child_data.loc + '">' + child_data.name;
+              file_list.innerHTML = file_list.innerHTML + '<br>';
+            })
+            });
+            
+          }
+          
+          function vote(key, vote){
+            var db_ref = firebase.database().ref("files/"+key);
+            db_ref.once("value").then(function(snapshot) {
+              var new_count = snapshot.val().upvotes + vote; // {first:"Ada",last:"Lovelace"}
+              console.log(new_count);
+              db_ref.set({
+                'name': snapshot.val().name,
+                'loc': snapshot.val().loc,
+                'owner': snapshot.val().owner,
+                'category': snapshot.val().category,
+                upvotes: new_count
+              });
+              console.log(snapshot.val().upvotes);
+            });
+      
+    }
         
     })
     
