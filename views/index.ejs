@@ -195,8 +195,11 @@ limitations under the License.
             });
             
           }
-          
-          function vote(key, vote){
+        
+    });
+    
+    
+     function vote(key, vote){
             var db_ref = firebase.database().ref("files/"+key);
             db_ref.once("value").then(function(snapshot) {
               var new_count = snapshot.val().upvotes + vote; // {first:"Ada",last:"Lovelace"}
@@ -211,9 +214,7 @@ limitations under the License.
               console.log(snapshot.val().upvotes);
             });
       
-          }
-        
-    })
+      }
     
    </script>
 </body>
