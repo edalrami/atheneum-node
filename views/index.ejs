@@ -95,6 +95,7 @@ limitations under the License.
   
  <script>
     $(document).ready(function() {
+        var file_list = document.getElementById('file_list');
         var storage = firebase.storage();
         var storageRef = storage.ref();
         var auth = firebase.auth();
@@ -210,7 +211,7 @@ limitations under the License.
               console.log(snapshot.val().upvotes);
             });
       
-    }
+          }
         
     })
     
