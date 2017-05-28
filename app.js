@@ -5,7 +5,7 @@ const bodyParser = require("body-parser")
 const ejs = require("ejs")
 const firebase = require("firebase-admin")
 const FirebaseStore = require("connect-session-firebase")(session)
-//const web3lib = require("web3")
+const web3lib = require("web3")
 
 //Server admin account authentication file (allows server to have admin access to firebase)
 const serviceAccount = require("./Atheneum-5adcbe47350f.json")
