@@ -36,9 +36,11 @@ limitations under the License.
   
   <!-- JQUERY -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
-<script>
+  <!--Firebase-->
+  <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+  <!---web3.js--->
+  <script type="text/javascript" src="web3.js-develop/lib/web3.js"></script>
+  <script>
   // Initialize Firebase
   var config = {
     apiKey: "AIzaSyB-StGhM37us-nn-6X4GAcOk1gf7HfWQgc",
@@ -83,6 +85,7 @@ limitations under the License.
             <h6>Choose File</h6>
             <input type="file" id="fileInput" name="fileInput"/>
             <br><br>
+            Eth Wallet Address: <input type="text" id="uploaderAddress" name="walletAddress">
             <input type="button" id="submitButton" value="SUBMIT">
             <h6>File URL:</h6>
             <span id="linkbox"></span>
@@ -95,6 +98,17 @@ limitations under the License.
   
  <script>
     $(document).ready(function() {
+      
+      
+        //Initialize web3 instance
+        if (typeof web3 !== 'undefined') {
+          web3 = new Web3(web3.currentProvider);
+        } else {
+        // set the provider you want from Web3.providers
+          web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8080"));
+        }
+
+
         var file_list = document.getElementById('file_list');
         var storage = firebase.storage();
         var storageRef = storage.ref();
@@ -104,20 +118,7 @@ limitations under the License.
         
         var fileToUpload
         var uploadRef
-        
-        
-        
-        
-        function uploadToFirebase(file) {
-            uploadRef = storageRef.child("testUploads/"+file.name)
-            
-            console.log(fileToUpload)
-            
-            return uploadRef.put(file).then(function(snapshot) {
-                console.log("NEW DOWNLOAD URL: "+snapshot.downloadURL)
-                $("#linkbox").html(snapshot.downloadURL)
-            })
-        }
+        var uploaderWallet
         
         function handleFileSelect(file){
           //evt.stopPropagation();
@@ -143,6 +144,7 @@ limitations under the License.
               'loc': url,
               'upvotes': 0,
               'owner': 'nikola',
+              'Eth Address': uploaderWallet,
               'category': 'yolo'
             });
             console.log('File available at', url);
@@ -163,12 +165,20 @@ limitations under the License.
         
         
         $("#submitButton").click(function() {
-            if($("#fileInput").val()) { 
+            if($("#fileInput").val() && $("#uploaderAddress").val()) { 
                 fileToUpload = document.querySelector("[name='fileInput']").files[0];
-                //uploadToFirebase(fileToUpload)
+                uploaderWallet = $("#uploaderAddress").val();
+                var balance = web3.eth.getBalance("0x766e03463bA84d870B84a90f4Be761f35F71c1a0",function(error, result){
+                  if(!error){
+                    console.log(result);
+                  }else{
+                    console.log(error);
+                  }
+                });
+                //console.log(balance)
                 handleFileSelect(fileToUpload);
-                
             }
+            
         })
         
         

@@ -5,6 +5,7 @@ const bodyParser = require("body-parser")
 const ejs = require("ejs")
 const firebase = require("firebase-admin")
 const FirebaseStore = require("connect-session-firebase")(session)
+//const web3lib = require("web3")
 
 //Server admin account authentication file (allows server to have admin access to firebase)
 const serviceAccount = require("./Atheneum-5adcbe47350f.json")
@@ -40,6 +41,7 @@ app.set('view engine', 'ejs')
 
 // Define public folder location (for client side javascript and CSS)
 app.use(express.static('./public'))
+//app.use(express.static('./node_modules/web3'))
 
 // Define how sessions behave and where they are stored
 app.use(session({
