@@ -99,8 +99,9 @@ limitations under the License.
  <script>
     $(document).ready(function() {
       
-      
-        //Initialize web3 instance
+        //NOTE: If you're going to test the server app on heroku then use metamask so it injects web3
+        //Initialize web3 instance...if MetaMask is installed as a plugin, then metamask will automaticall inject web3
+        //Otherwise set new web3 provider to the local host. Local host can vary. 
         if (typeof web3 !== 'undefined') {
           web3 = new Web3(web3.currentProvider);
         } else {
@@ -118,12 +119,13 @@ limitations under the License.
         
         var fileToUpload
         var uploadRef
-        var uploaderWallet
+        
+        //Current wallet address for testing 
+        //Current balance on Ropsten testnet: 1.00 Ether
+        //Current balance on Rinkeby testnet: 3.00 Ether
+        var uploaderWallet = "0x766e03463bA84d870B84a90f4Be761f35F71c1a0";
         
         function handleFileSelect(file){
-          //evt.stopPropagation();
-          //evt.preventDefault();
-          //var file = evt.target.files[0];
 
           var metadata = {
             'contentType': file.type
@@ -164,11 +166,16 @@ limitations under the License.
         }
         
         
+        //ACTIONS TO BE VERIFIED
+        //For Downloaders: Use web3.eth.getBalance to verify that the user has enough Ether in their account
+        //For Uploaders: Verify that the account exists
+        //Note: for functions that return values getBalance..they must use callbacks...i.e function(error, result){}
+        //to handle the possible error and result.
         $("#submitButton").click(function() {
             if($("#fileInput").val() && $("#uploaderAddress").val()) { 
                 fileToUpload = document.querySelector("[name='fileInput']").files[0];
                 uploaderWallet = $("#uploaderAddress").val();
-                var balance = web3.eth.getBalance("0x766e03463bA84d870B84a90f4Be761f35F71c1a0",function(error, result){
+                var balance = web3.eth.getBalance(walletAddress,function(error, result){
                   if(!error){
                     console.log(result);
                   }else{
