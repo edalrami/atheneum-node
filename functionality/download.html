@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<!--
+Copyright (c) 2016 Google Inc.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<html>
+<head>
+    <meta charset=utf-8 />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atheneum Filesharing- Browse</title>
+
+    <!-- Material Design Theming -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.blue_grey-amber.min.css" />
+    <link rel="stylesheet" href="public/main.css">
+
+    <!--link rel="stylesheet" href="/main.css">
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
+
+    <!-- JQUERY -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyB-StGhM37us-nn-6X4GAcOk1gf7HfWQgc",
+            authDomain: "atheneum-91b27.firebaseap.com",
+            databaseURL: "https://atheneum-91b27.firebaseio.com",
+            projectId: "atheneum-91b27",
+            storageBucket: "atheneum-91b27.appspot.com",
+            messagingSenderId: "541428318220"
+        };
+        firebase.initializeApp(config);
+    </script>
+
+</head>
+<body>
+<!-- Simple header with scrollable tabs. -->
+<div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <header class="mdl-layout__header mdl-color-text--yellow-A700 mdl-color--blue-grey-800">
+        <div class="mdl-layout__header-row">
+            <!-- Title -->
+            <span class="mdl-layout-title mdl-color-text--yellow-A700">Atheneum</span>
+            <div class="mdl-layout-spacer"></div>
+            <!-- Navigation -->
+            <nav class="mdl-navigation">
+                <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="http://www.weekinethereum.com/">News</a>
+                <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="https://www.coinbase.com/">Coinbase</a>
+            </nav>
+        </div>
+        <!-- Tabs -->
+        <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
+            <a href="#scroll-tab-1" id="All" class="mdl-layout__tab is-active mdl-color-text--yellow-A700">All</a>
+            <a href="#scroll-tab-2" id="History" class="mdl-layout__tab mdl-color-text--yellow-A700">History</a>
+            <a href="#scroll-tab-3" id="Literature" class="mdl-layout__tab mdl-color-text--yellow-A700">Literature</a>
+            <a href="#scroll-tab-4" id="Chemistry" class="mdl-layout__tab mdl-color-text--yellow-A700">Chemistry</a>
+            <a href="#scroll-tab-5" id="Music" class="mdl-layout__tab mdl-color-text--yellow-A700">Music</a>
+            <a href="#scroll-tab-6" id="Art" class="mdl-layout__tab mdl-color-text--yellow-A700">Art</a>
+        </div>
+    </header>
+    <style type='text/css'>
+
+        .mdl-layout .mdl-layout__drawer-button .mdl-layout__tab-panel .mdl-card__supporting-text .mdl-card__title .mdl-card{
+            color: #FFD600;
+        }
+    </style>
+    <div class="mdl-layout__drawer mdl-color-text--yellow-A700 mdl-color--blue-grey-800">
+        <span class="mdl-layout-title mdl-color-text--yellow-A700">Atheneum</span>
+        <nav class="mdl-navigation">
+            <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="upload.html">Upload</a>
+            <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="download.html">Browse Files</a>
+            <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="index.html">My Account</a>
+            <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="">Sign Out</a>
+        </nav>
+    </div>
+    <main class="mdl-layout__content mdl-color--blue-grey-800">
+        <!-- "All" tab -->
+        <section class="mdl-layout__tab-panel is-active mdl-color-text--grey-600 mdl-color--blue-grey-800" id="scroll-tab-1">
+            <div class="page-content">
+                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color-text--grey-600 mdl-color--blue-grey-500">
+              <div class="mdl-card__title mdl-color--blue-grey-500 mdl-color-text--yellow-A700 ">
+                <h2 class="mdl-card__title-text">Available Files:</h2>
+              </div>
+              <div class="mdl-card__supporting-text mdl-color-text--grey-600 mdl-color--blue-grey-500" id="messagesDiv">
+                <div id="file_list_All">
+                  <p> </p>
+                </div>
+              </div>
+            </div>                
+            </div>
+        </section>
+        <!-- "History" tab -->
+        <section class="mdl-layout__tab-panel" id="scroll-tab-2">
+            <div class="page-content">
+                 <div class="page-content">
+                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color-text--grey-600 mdl-color--blue-grey-500">
+              <div class="mdl-card__title mdl-color--blue-grey-500 mdl-color-text--yellow-A700 ">
+                <h2 class="mdl-card__title-text">Available Files:</h2>
+              </div>
+              <div class="mdl-card__supporting-text mdl-color-text--grey-600 mdl-color--blue-grey-500" id="messagesDiv">
+                <div id="file_list_History">
+                  <p> </p>
+                </div>
+              </div>
+            </div>                
+            </div>
+            </div>
+        </section>
+        <!-- "Literature" tab -->
+        <section class="mdl-layout__tab-panel" id="scroll-tab-3">
+            <div class="page-content"><div class="page-content">
+                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color-text--grey-600 mdl-color--blue-grey-500">
+              <div class="mdl-card__title mdl-color--blue-grey-500 mdl-color-text--yellow-A700 ">
+                <h2 class="mdl-card__title-text">Available Files:</h2>
+              </div>
+              <div class="mdl-card__supporting-text mdl-color-text--grey-600 mdl-color--blue-grey-500" id="messagesDiv">
+                <div id="file_list_Literature">
+                  <p> </p>
+                </div>
+              </div>
+            </div>                
+            </div></div>
+        </section>
+        <!-- "Chemistry" tab -->
+        <section class="mdl-layout__tab-panel" id="scroll-tab-4">
+            <div class="page-content">
+                 <div class="page-content">
+                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color-text--grey-600 mdl-color--blue-grey-500">
+              <div class="mdl-card__title mdl-color--blue-grey-500 mdl-color-text--yellow-A700 ">
+                <h2 class="mdl-card__title-text">Available Files:</h2>
+              </div>
+              <div class="mdl-card__supporting-text mdl-color-text--grey-600 mdl-color--blue-grey-500" id="messagesDiv">
+                <div id="file_list_Chemistry">
+                  <p> </p>
+                </div>
+              </div>
+            </div>                
+            </div>
+            </div>
+        </section>
+        <!-- "Music" tab -->
+        <section class="mdl-layout__tab-panel" id="scroll-tab-5">
+            <div class="page-content">
+                <div class="page-content">
+                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color-text--grey-600 mdl-color--blue-grey-500">
+              <div class="mdl-card__title mdl-color--blue-grey-500 mdl-color-text--yellow-A700 ">
+                <h2 class="mdl-card__title-text">Available Files:</h2>
+              </div>
+              <div class="mdl-card__supporting-text mdl-color-text--grey-600 mdl-color--blue-grey-500" id="messagesDiv">
+                <div id="file_list_Music">
+                  <p> </p>
+                </div>
+              </div>
+            </div>                
+            </div>
+            </div>
+        </section>
+        <!-- "Art" tab -->
+        <section class="mdl-layout__tab-panel" id="scroll-tab-6">
+            <div class="page-content"><div class="page-content">
+                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color-text--grey-600 mdl-color--blue-grey-500">
+              <div class="mdl-card__title mdl-color--blue-grey-500 mdl-color-text--yellow-A700 ">
+                <h2 class="mdl-card__title-text">Available Files:</h2>
+              </div>
+              <div class="mdl-card__supporting-text mdl-color-text--grey-600 mdl-color--blue-grey-500" id="messagesDiv">
+                <div id="file_list_Art">
+                  <p> </p>
+                </div>
+              </div>
+            </div>                
+            </div></div>
+        </section>
+    </main>
+</div>
+<script>
+    $(document).ready(function() {
+        var storage = firebase.storage();
+        var storageRef = storage.ref();
+        var fileToUpload
+        var uploadRef
+
+
+        function uploadToFirebase(file) {
+            uploadRef = storageRef.child("testUploads/"+file.name)
+
+            console.log(fileToUpload)
+
+            return uploadRef.put(file).then(function(snapshot) {
+                console.log("NEW DOWNLOAD URL: "+snapshot.downloadURL)
+                $("#linkbox").html(snapshot.downloadURL)
+            })
+        }
+
+
+        $("#submitButton").click(function() {
+            if($("#fileInput").val()) {
+                fileToUpload = document.querySelector("[name='fileInput']").files[0]
+                uploadToFirebase(fileToUpload)
+
+            }
+        })
+
+    })
+
+
+    //var file_list = document.getElementById('file_list');
+    var auth = firebase.auth();
+    var database = firebase.database();
+    //db_ref points to the file tab in the DB
+    var db_ref = database.ref("files").orderByChild('upvotes');
+    var storage = firebase.storage();
+    var storageRef = storage.ref();
+
+
+    function handleFileSelect(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+      var file = evt.target.files[0];
+
+      var metadata = {
+        'contentType': file.type
+      };
+
+      // Push to child path.
+      // [START oncomplete]
+      storageRef.child('testUploads/' + file.name).put(file, metadata).then(function(snapshot) {
+        console.log('Uploaded', snapshot.totalBytes, 'bytes.');
+        console.log(snapshot.metadata);
+        var url = snapshot.downloadURL;
+        var new_entry_ref = db_ref.push();
+        //Default DB entry
+        new_entry_ref.set({
+          'name': file.name,
+          'loc': url,
+          'upvotes': 0,
+          'owner': 'nikola',
+          'category': 'yolo',
+          'wallet': 1,
+          'wallet_pass': 2
+        });
+        console.log('File available at', url);
+        database.ref()
+        // [START_EXCLUDE]
+        document.getElementById('linkbox').innerHTML = '<a href="' +  url + '">Uploaded File</a>';
+        file_list.innerHTML = file_list.innerHTML + '<a href="' + url + '">' + file.name;        
+        file_list.innerHTML = file_list.innerHTML + '<br>';
+        //document.getElementById('file_list').innerHTML = '<a href="' +  url + '">Uploaded File</a>';
+        // [END_EXCLUDE]
+      }).catch(function(error) {
+        // [START onfailure]
+        console.error('Upload failed:', error);
+        // [END onfailure]
+      });
+      // [END oncomplete]
+    }
+
+    //Display list of files uploaded
+    window.onload = function() {
+        pull_db("All");
+        document.getElementById("All").addEventListener("click", function(){
+            pull_db("All");
+            console.log("All pressed"); 
+        });
+        document.getElementById("History").addEventListener("click", function(){
+            pull_db("History");
+            console.log("History pressed"); 
+        });
+        document.getElementById("Literature").addEventListener("click", function(){
+            pull_db("Literature");
+            console.log("Literature pressed"); 
+        });
+        document.getElementById("Chemistry").addEventListener("click", function(){
+            pull_db("Chemistry");
+            console.log("Chemistry pressed"); 
+        });
+        document.getElementById("Music").addEventListener("click", function(){
+            pull_db("Music");
+            console.log("Music pressed"); 
+        });
+        document.getElementById("Art").addEventListener("click", function(){
+            pull_db("Art");
+            console.log("Art pressed"); 
+        });
+        pull_db();
+  }
+
+  function pull_db(tag) {
+    var file_list = document.getElementById('file_list_'+tag);
+    file_list.innerHTML = "";
+    //.once polls the database one time
+    db_ref.once('value').then(function(snapshot) {
+      //go through each element from the 'files' tab in the DB
+      snapshot.forEach(function(child) {
+        var child_key = child.key;
+        var child_data = child.val();
+        //console.log(child.val());
+        //add buttons
+        var up = "up";
+        var down = "down";
+        if(child_data.category === tag || tag == "All") {
+            console.log("There was a match with the tag: " + tag);
+            //orderByChild by default orders the DB in ascending order, so as the votecount increases, it will move down the list
+            file_list.innerHTML = file_list.innerHTML + "<button class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, -1)\"> + </button>";
+            file_list.innerHTML = file_list.innerHTML + "&nbsp; &nbsp;";
+            file_list.innerHTML = file_list.innerHTML + "<button class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, 1)\"> - </button>";
+            file_list.innerHTML = file_list.innerHTML + '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;';
+            //display the file names and have them link to their cloud storage location
+            file_list.innerHTML = file_list.innerHTML + '<a href="' + child_data.loc + '">' + child_data.name;
+            file_list.innerHTML = file_list.innerHTML + '<br>';
+        }
+      })
+    });
+  }
+
+    function vote(key, vote){
+      var db_ref = firebase.database().ref("files/"+key);
+      db_ref.once("value").then(function(snapshot) {
+        var new_count = snapshot.val().upvotes + vote; // {first:"Ada",last:"Lovelace"}
+        console.log(new_count);
+        db_ref.set({
+          'name': snapshot.val().name,
+          'loc': snapshot.val().loc,
+          'owner': snapshot.val().owner,
+          'category': snapshot.val().category,
+          upvotes: new_count
+        });
+        console.log(snapshot.val().upvotes);
+  });
+      
+    }
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
