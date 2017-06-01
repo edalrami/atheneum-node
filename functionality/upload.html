@@ -134,10 +134,11 @@ limitations under the License.
                                         <div class="file_input_div">
                                             <div class="file_input">
                                             <h6>Choose File</h6>
-            <input type="file" id="file" name="file"/>
+
                                                 <label class="image_input_button mdl-button mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-js-ripple-effect mdl-button--colored">
                                                     <i class="material-icons">file_upload</i>
-                                                    <input id="file_input_file" class="none" type="file" />
+
+                                                    <input id="file" class="none" type="file" id="file" name="file"/>
                                                 </label>
                                             </div>
                                             <div id="file_input_text_div" class="mdl-textfield mdl-js-textfield textfield-demo">
@@ -181,8 +182,7 @@ limitations under the License.
 </div>
 
 <script>
-
-    console.log("yo!!!");
+    //create refs to various firebase components
     var file_list = document.getElementById('file_list');
     var auth = firebase.auth();
     var database = firebase.database();
@@ -195,57 +195,56 @@ limitations under the License.
     var subject;
 
 
-   document.getElementById('file').addEventListener('change', handleFileSelect, true);
+    //bind file select function to the upload button
+    document.getElementById('file').addEventListener('change', handle_file_select, true);
     //document.getElementById('file').disabled = true;
-   function handleFileSelect(evt) {
-    console.log("Handling uploaded file");
-      evt.stopPropagation();
-      evt.preventDefault();
-      upload_file = evt.target.files[0];
-      console.log(upload_file);
+    //Reads the uploaded file and assembles a reference and metadata for the file
+    function handle_file_select(evt) {
+        console.log("Handling uploaded file");
+        evt.stopPropagation();
+        evt.preventDefault();
+        //set upload_file to the uploaded file
+        upload_file = evt.target.files[0];
+        //debug
+        console.log(upload_file);
 
-      metadata = {
-        'contentType': upload_file.type
-      };
+        metadata = {
+            'contentType': upload_file.type
+        };
     }
 
+    //db_upload is called when the "Send it" button is pressed
+    //Actually pushes the file to the database and cloud storage
     function db_upload() {
-        console.log("db_upload called"); 
         console.log(upload_file);
         console.log("subject = "+subject);
-        console.log("wew" + document.getElementById('file_description').value);
+        //Not sure why, but this crashes 100% of the time without this if statement...
         if(!upload_file) {};
       // Push to child path.
-      // [START oncomplete]
-      storageRef.child('testUploads/' + upload_file.name).put(upload_file, metadata).then(function(snapshot) {
-        console.log('Uploaded', snapshot.totalBytes, 'bytes.');
-        console.log(snapshot.metadata);
-        var url = snapshot.downloadURL;
-        var new_entry_ref = db_ref.push();
-        //Default DB entry
-        new_entry_ref.set({
-          'name': upload_file.name,
-          'loc': url,
-          'upvotes': 0,
-          'owner': 'nikola',
-          'category': subject,
-          'desc': document.getElementById('file_description').value,
-          'wallet': 1,
-          'wallet_pass': 2
-        });
-        console.log('File available at', url);
-        database.ref()
-        // [START_EXCLUDE]
-        // [END_EXCLUDE]
-      }).catch(function(error) {
-        // [START onfailure]
-        console.error('Upload failed:', error);
-        // [END onfailure]
-      });
-      // [END oncomplete]
-
+        storageRef.child('testUploads/' + upload_file.name).put(upload_file, metadata).then(function(snapshot) {
+            console.log('Uploaded', snapshot.totalBytes, 'bytes.');
+            console.log(snapshot.metadata);
+            var url = snapshot.downloadURL;
+            var new_entry_ref = db_ref.push();
+            //Default DB entry
+            new_entry_ref.set({
+                'name': upload_file.name,
+                'loc': url,
+                'upvotes': 0,
+                'owner': 'nikola',
+                'category': subject,
+                'desc': document.getElementById('file_description').value,
+                'wallet': 1,
+                'wallet_pass': 2
+            });
+            console.log('File available at', url);
+            database.ref()
+        }).catch(function(error) {
+            console.error('Upload failed:', error);
+           });
     }
 
+    //Sets the subject based on the user input on the drop-down menu
     function set_subject(category) {
         subject = category;
         console.log("subject = " + subject);

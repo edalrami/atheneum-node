@@ -189,37 +189,6 @@ limitations under the License.
     </main>
 </div>
 <script>
-    $(document).ready(function() {
-        var storage = firebase.storage();
-        var storageRef = storage.ref();
-        var fileToUpload
-        var uploadRef
-
-
-        function uploadToFirebase(file) {
-            uploadRef = storageRef.child("testUploads/"+file.name)
-
-            console.log(fileToUpload)
-
-            return uploadRef.put(file).then(function(snapshot) {
-                console.log("NEW DOWNLOAD URL: "+snapshot.downloadURL)
-                $("#linkbox").html(snapshot.downloadURL)
-            })
-        }
-
-
-        $("#submitButton").click(function() {
-            if($("#fileInput").val()) {
-                fileToUpload = document.querySelector("[name='fileInput']").files[0]
-                uploadToFirebase(fileToUpload)
-
-            }
-        })
-
-    })
-
-
-    //var file_list = document.getElementById('file_list');
     var auth = firebase.auth();
     var database = firebase.database();
     //db_ref points to the file tab in the DB
@@ -227,48 +196,6 @@ limitations under the License.
     var storage = firebase.storage();
     var storageRef = storage.ref();
 
-
-    function handleFileSelect(evt) {
-      evt.stopPropagation();
-      evt.preventDefault();
-      var file = evt.target.files[0];
-
-      var metadata = {
-        'contentType': file.type
-      };
-
-      // Push to child path.
-      // [START oncomplete]
-      storageRef.child('testUploads/' + file.name).put(file, metadata).then(function(snapshot) {
-        console.log('Uploaded', snapshot.totalBytes, 'bytes.');
-        console.log(snapshot.metadata);
-        var url = snapshot.downloadURL;
-        var new_entry_ref = db_ref.push();
-        //Default DB entry
-        new_entry_ref.set({
-          'name': file.name,
-          'loc': url,
-          'upvotes': 0,
-          'owner': 'nikola',
-          'category': 'yolo',
-          'wallet': 1,
-          'wallet_pass': 2
-        });
-        console.log('File available at', url);
-        database.ref()
-        // [START_EXCLUDE]
-        document.getElementById('linkbox').innerHTML = '<a href="' +  url + '">Uploaded File</a>';
-        file_list.innerHTML = file_list.innerHTML + '<a href="' + url + '">' + file.name;        
-        file_list.innerHTML = file_list.innerHTML + '<br>';
-        //document.getElementById('file_list').innerHTML = '<a href="' +  url + '">Uploaded File</a>';
-        // [END_EXCLUDE]
-      }).catch(function(error) {
-        // [START onfailure]
-        console.error('Upload failed:', error);
-        // [END onfailure]
-      });
-      // [END oncomplete]
-    }
 
     //Display list of files uploaded
     window.onload = function() {
@@ -297,52 +224,51 @@ limitations under the License.
             pull_db("Art");
             console.log("Art pressed"); 
         });
-        pull_db();
-  }
+    }
 
-  function pull_db(tag) {
-    var file_list = document.getElementById('file_list_'+tag);
-    file_list.innerHTML = "";
-    //.once polls the database one time
-    db_ref.once('value').then(function(snapshot) {
-      //go through each element from the 'files' tab in the DB
-      snapshot.forEach(function(child) {
-        var child_key = child.key;
-        var child_data = child.val();
-        //console.log(child.val());
-        //add buttons
-        var up = "up";
-        var down = "down";
-        if(child_data.category === tag || tag == "All") {
-            console.log("There was a match with the tag: " + tag);
-            //orderByChild by default orders the DB in ascending order, so as the votecount increases, it will move down the list
-            file_list.innerHTML = file_list.innerHTML + "<button class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, -1)\"> + </button>";
-            file_list.innerHTML = file_list.innerHTML + "&nbsp; &nbsp;";
-            file_list.innerHTML = file_list.innerHTML + "<button class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, 1)\"> - </button>";
-            file_list.innerHTML = file_list.innerHTML + '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;';
-            //display the file names and have them link to their cloud storage location
-            file_list.innerHTML = file_list.innerHTML + '<a href="' + child_data.loc + '">' + child_data.name;
-            file_list.innerHTML = file_list.innerHTML + '<br>';
-        }
-      })
-    });
-  }
-
-    function vote(key, vote){
-      var db_ref = firebase.database().ref("files/"+key);
-      db_ref.once("value").then(function(snapshot) {
-        var new_count = snapshot.val().upvotes + vote; // {first:"Ada",last:"Lovelace"}
-        console.log(new_count);
-        db_ref.set({
-          'name': snapshot.val().name,
-          'loc': snapshot.val().loc,
-          'owner': snapshot.val().owner,
-          'category': snapshot.val().category,
-          upvotes: new_count
+    //Access the firebase DB and return all files that have the same category as the argument
+    function pull_db(tag) {
+        var file_list = document.getElementById('file_list_'+tag);
+        file_list.innerHTML = "";
+        //.once polls the database one time
+        db_ref.once('value').then(function(snapshot) {
+            //go through each element from the 'files' tab in the DB
+            snapshot.forEach(function(child) {
+                var child_key = child.key;
+                var child_data = child.val();
+                //add buttons 
+                var up = "up";
+                var down = "down";
+                if(child_data.category === tag || tag == "All") {
+                    console.log("There was a match with the tag: " + tag);
+                    //orderByChild by default orders the DB in ascending order, so as the votecount increases, it will move down the list
+                    file_list.innerHTML = file_list.innerHTML + "<button class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, -1)\"> + </button>";
+                    file_list.innerHTML = file_list.innerHTML + "&nbsp; &nbsp;";
+                    file_list.innerHTML = file_list.innerHTML + "<button class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, 1)\"> - </button>";
+                    file_list.innerHTML = file_list.innerHTML + '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;';
+                    //display the file names and have them link to their cloud storage location
+                    file_list.innerHTML = file_list.innerHTML + '<a href="' + child_data.loc + '">' + child_data.name;
+                    file_list.innerHTML = file_list.innerHTML + '<br>';
+                }
+            })
         });
+    }
+
+    //Change the votes value of a specific file
+    function vote(key, vote){
+        var db_ref = firebase.database().ref("files/"+key);
+        db_ref.once("value").then(function(snapshot) {
+            var new_count = snapshot.val().upvotes + vote; // {first:"Ada",last:"Lovelace"}
+            console.log(new_count);
+            db_ref.set({
+                'name': snapshot.val().name,
+                'loc': snapshot.val().loc,
+                'owner': snapshot.val().owner,
+                'category': snapshot.val().category,
+                upvotes: new_count
+            });
         console.log(snapshot.val().upvotes);
-  });
-      
+        });
     }
 
 </script>
