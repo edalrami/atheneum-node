@@ -10,4 +10,17 @@ module.exports.signUpPage = function(req, res) {
     })
 }
 
+
+module.exports.upload = function(req, res) {
+    return res.renderT("upload", {
+        template: "upload"
+    })
+}
+
+module.exports.download = function(req, res) {
+    return res.renderT("download", {
+        template: "download"
+    })
+}
+
 //

@@ -90,6 +90,8 @@ app.use(function(req, res, next) {
 // GET REQUESTS (Page rendering, redirects, other non-database-modifying functions)
 app.get('/', routes.main.index )
 app.get('/signUp', routes.main.signUpPage)
+app.get('/upload', routes.main.upload)
+app.get('/download', routes.main.download)
 
 
 // POST REQUESTS
