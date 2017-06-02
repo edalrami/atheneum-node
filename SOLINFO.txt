@@ -5,17 +5,27 @@ a specified wallet address. When executing the contract do NOT enter ether amoun
 you'll be sending Ether to the address of the contract and the specified address. Only fill in the input fields for the get Uploader function.
 
 
-CONTRACT ADDRESS AND INTERFACE FOR TESING ON THE GETH CLIENT ROPSTEN TESTNET:
+CONTRACT ADDRESSES AND INTERFACE FOR TESING ON THE GETH CLIENT ROPSTEN TESTNET:
 
+
+For sending 1*10^(-17) ETH:
 
 Contract Address:
 0x2e16bfa0fD6F116B4F9C9785916342920070D90B
 
-JSON INTERFACE:
+JSON INTERFACE/ABI:
 
 [ { "constant": false, "inputs": [ { "name": "_uploaderAddress", "type": "address" } ], "name": "pay", "outputs": [], "payable": true, "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "uploaders", "outputs": [ { "name": "active", "type": "bool", "value": false }, { "name": "cost", "type": "uint256", "value": "0" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address", "value": "0xb0eab9c6ab4b61604502d87eec0ad07020618bec" } ], "payable": false, "type": "function" }, { "inputs": [ { "name": "_uploaderAddress", "type": "address", "index": 0, "typeShort": "address", "bits": "", "displayName": "&thinsp;<span class=\"punctuation\">_</span>&thinsp;uploader Address", "template": "elements_input_address", "value": "" } ], "payable": false, "type": "constructor" } ]
 
 
 
+For sending 1 ETH:
 
+Contract Address:
+
+0xdc6e8e8acBB8290b2D98Ac2f3ccD7750Ff3E3E3b
+
+JSON INTERFACE/ABI:
+
+[ { "constant": false, "inputs": [ { "name": "_uploaderAddress", "type": "address" } ], "name": "pay", "outputs": [], "payable": true, "type": "function" }, { "constant": false, "inputs": [], "name": "kill", "outputs": [], "payable": false, "type": "function" }, { "constant": true, "inputs": [ { "name": "", "type": "address" } ], "name": "uploaders", "outputs": [ { "name": "active", "type": "bool", "value": false }, { "name": "cost", "type": "uint256", "value": "0" } ], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [ { "name": "", "type": "address", "value": "0xb0eab9c6ab4b61604502d87eec0ad07020618bec" } ], "payable": false, "type": "function" }, { "inputs": [ { "name": "_uploaderAddress", "type": "address", "index": 0, "typeShort": "address", "bits": "", "displayName": "&thinsp;<span class=\"punctuation\">_</span>&thinsp;uploader Address", "template": "elements_input_address", "value": "" } ], "payable": false, "type": "constructor" } ]
 
