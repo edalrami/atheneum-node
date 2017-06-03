@@ -34,6 +34,16 @@ limitations under the License.
     
     <!-- JQUERY -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+   
+    <!-----REMODAL------->
+    <link rel="stylesheet" href="/remodal.css">
+    <link rel="stylesheet" href="/remodal-default-theme.css">
+    <script src="/remodal.min.js"></script>
+    
+    <!------WEB3-------->
+    <script src="/web3.js"></script>
+    
 
    <!------Initialize Firebase------>
     <script>
@@ -84,10 +94,11 @@ limitations under the License.
         </nav>
     </div>
     <main class="mdl-layout__content mdl-color--blue-grey-800">
+        
         <!-- "All" tab -->
         <section class="mdl-layout__tab-panel is-active mdl-color-text--grey-600 mdl-color--blue-grey-800" id="scroll-tab-1">
             <div class="page-content">
-                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color-text--grey-600 mdl-color--blue-grey-500">
+            <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color-text--grey-600 mdl-color--blue-grey-500">
               <div class="mdl-card__title mdl-color--blue-grey-500 mdl-color-text--yellow-A700 ">
                 <h2 class="mdl-card__title-text">Available Files:</h2>
               </div>
@@ -96,7 +107,18 @@ limitations under the License.
                   <p> </p>
                 </div>
               </div>
-            </div>                
+            </div>
+                 <!--------Modal Popup---------->
+                <div class="remodal" data-remodal-id="modal">
+                    <button data-remodal-action="close" class="remodal-close"></button>
+                    <h1>Remodal</h1>
+                    <p>Please enter your Ethereum Wallet Address:</p>
+                    <input type="text" id="downloaderAddress" name="walletAddress">
+                    <br>
+                    <br>
+                    <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
+                    <button id ="downloadButton"data-remodal-action="confirm" class="remodal-confirm">Download</button>
+                </div>
             </div>
         </section>
         <!-- "History" tab -->
@@ -189,7 +211,18 @@ limitations under the License.
     var db_ref = database.ref("files").orderByChild('upvotes');
     var storage = firebase.storage();
     var storageRef = storage.ref();
+   
 
+
+    //NOTE: If you're going to test the server app on heroku then use metamask so it injects web3
+    //Initialize web3 instance...if MetaMask is installed as a plugin, then metamask will automaticall inject web3
+    //Otherwise set new web3 provider to the local host. Local host can vary. 
+    if (typeof web3 !== 'undefined') {
+        web3 = new Web3(web3.currentProvider);
+    } else {
+    // set the provider you want from Web3.providers
+         web3 = new Web3(new Web3.providers.HttpProvider("http://atheneum-app.herokuapp.com/"));
+    }    
 
     //Display list of files uploaded
     window.onload = function() {
@@ -241,7 +274,8 @@ limitations under the License.
                     file_list.innerHTML = file_list.innerHTML + "<button class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, 1)\"> - </button>";
                     file_list.innerHTML = file_list.innerHTML + '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;';
                     //display the file names and have them link to their cloud storage location
-                    file_list.innerHTML = file_list.innerHTML + '<a href="' + child_data.loc + '">' + child_data.name;
+                    //file_list.innerHTML = file_list.innerHTML + '<a href="#modal' + child_data.loc + '">' + child_data.name;
+                    file_list.innerHTML = file_list.innerHTML + '<a onClick=\"displayModal()\">' + child_data.name;
                     file_list.innerHTML = file_list.innerHTML + '<br>';
                 }
             })
@@ -264,6 +298,30 @@ limitations under the License.
         console.log(snapshot.val().upvotes);
         });
     }
+    
+   
+    
+    function displayModal(){
+      var inst = $('[data-remodal-id=modal]').remodal();
+      inst.open();
+      console.log("MODAL IS DISPLAYING")
+    }
+    
+    $("#downloadButton").click(function() {
+       if($("#downloaderAddress").val() != null){
+           myWallet = $("#downloaderAddress").val();
+           var balance = web3.eth.getBalance(myWallet,function(error, result){
+                if(!error){
+                    console.log("YOUR BALANCE "+ result);
+                 }else{
+                    console.log("COULDNT GET BALANCE "+error);
+            }
+        });
+       } 
+    });
+    
+
+    
 
 </script>
 </body>

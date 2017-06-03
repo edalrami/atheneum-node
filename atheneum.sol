@@ -35,13 +35,13 @@ contract getUploader is mortal{
 		uint256 cost;
 	}
 
-    //Note: cost is set to 1 which is the equivalent of 1*10^(-17) ether
-    //This is to test the payments of microtransactions. Cost is subject to change
+    //Note: cost is set to 1 ETH which is equivalent to 1*10^(17) 
+    //To test the payments of microtransactions, the cost may be subject to change
     //after further testing
 	function getUploader(address _uploaderAddress){
 		uploaders[_uploaderAddress] = Uploader({
 		active: true,
-		cost: 1
+		cost: 100000000000000000
 		});
 	}
 
