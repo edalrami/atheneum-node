@@ -397,8 +397,21 @@ limitations under the License.
                     console.log("COULDNT GET BALANCE "+error);
                 }
             });
-            contractInstance.uploaders("0x39da84129C72CC8E2b7d94D9742B0c44b17955aa");
-            contractInstance.pay(myWallet);
+            contractInstance.uploaders("0x39da84129C72CC8E2b7d94D9742B0c44b17955aa", function(error, result){
+                if(!error){
+                    console.log("MAKING PAYMENT TO " + result);
+                }else{
+                    console.log("ADDRESS GRAB FAILED " + error)
+                }
+            });
+            
+            contractInstance.pay(myWallet, function(error, reuslt){
+                if(!error){
+                    console.log("PAYMENT SENT " + result);
+                }else{
+                    console.log("PAYMENT LOST IN OBLIVION: "+ error);
+                }
+            });
        } 
     });
     
