@@ -49,6 +49,10 @@
   height: 600px;
 }
 
+#upload_subject {
+  height: 250px;
+}
+
 .none {
   display: none;
 }
