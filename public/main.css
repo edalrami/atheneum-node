@@ -26,6 +26,7 @@
 
 .mdl-card {
   overflow: auto;
+  height: 600px;
 }
 
 .file_input {
@@ -34,8 +35,18 @@
 
 #file_input_text_div {
   width: 200px;
+  height: 100px;
+  overflow: auto;
   margin-top: -8px;
   margin-left: 5px;
+}
+
+#upload_desc {
+  height: 15px;
+}
+
+#upload_mdl_card {
+  height: 600px;
 }
 
 .none {

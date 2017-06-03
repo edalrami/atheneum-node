@@ -211,9 +211,7 @@ limitations under the License.
     var db_ref = database.ref("files").orderByChild('upvotes');
     var storage = firebase.storage();
     var storageRef = storage.ref();
-   
-
-
+    
     //NOTE: If you're going to test the server app on heroku then use metamask so it injects web3
     //Initialize web3 instance...if MetaMask is installed as a plugin, then metamask will automaticall inject web3
     //Otherwise set new web3 provider to the local host. Local host can vary. 
@@ -223,6 +221,87 @@ limitations under the License.
     // set the provider you want from Web3.providers
          web3 = new Web3(new Web3.providers.HttpProvider("http://atheneum-app.herokuapp.com/"));
     }    
+    
+    
+    //Address of the current solidity contract deployed the ethereum testnet blockchain
+    var contractAddress = "0xdc6e8e8acBB8290b2D98Ac2f3ccD7750Ff3E3E3b";
+    
+    
+    //Declare Application Binary Interface. Allows for interaction
+    //with solidity contract. Makes transactions readable. 
+    //Note: See atheneum.sol for the contracts being used and the
+    //defined functions handling transactions from the blockchain. 
+    var ABI = [{
+                "constant": false,
+                "inputs": [{
+                    "name": "_uploaderAddress",
+                    "type": "address"
+                }],
+                "name": "pay",
+                "outputs": [],
+                "payable": true,
+                "type": "function"
+            }, {
+                "constant": false,
+                "inputs": [],
+                "name": "kill",
+                "outputs": [],
+                "payable": false,
+                "type": "function"
+            }, {
+                "constant": true,
+                "inputs": [{
+                    "name": "",
+                    "type": "address"
+                }],
+                "name": "uploaders",
+                "outputs": [{
+                    "name": "active",
+                    "type": "bool",
+                    "value": false
+                }, {
+                    "name": "cost",
+                    "type": "uint256",
+                    "value": "0"
+                }],
+                "payable": false,
+                "type": "function"
+            }, {
+                "constant": true,
+                "inputs": [],
+                "name": "owner",
+                "outputs": [{
+                    "name": "",
+                    "type": "address",
+                    "value": "0xb0eab9c6ab4b61604502d87eec0ad07020618bec"
+                }],
+                "payable": false,
+                "type": "function"
+            }, {
+                "inputs": [{
+                    "name": "_uploaderAddress",
+                    "type": "address",
+                    "index": 0,
+                    "typeShort": "address",
+                    "bits": "",
+                    "displayName": "&thinsp;<span class=\"punctuation\">_</span>&thinsp;uploader Address",
+                    "template": "elements_input_address",
+                    "value": ""
+                }],
+                "payable": false,
+                "type": "constructor"
+            }];
+   
+   
+   //Create Web3 Contract object with ABI array
+   //Essentially this defines a contract object with the current functions defined
+   //in the ABi array
+    var myContract = web3.eth.contract(ABI);
+
+    //Instantiate contract from an existing address. 
+    //This takes myContract and uses the contract object myContract
+    //and searches for a contract at a specified address on the tesnet blockchain
+    var contractInstance = myContract.at(contractAddress);
 
     //Display list of files uploaded
     window.onload = function() {
