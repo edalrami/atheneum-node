@@ -121,12 +121,12 @@ limitations under the License.
                                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
                                             <input class="mdl-textfield__input" type="text" id="subject_select" value="Subject" readonly tabIndex="-1">
                                                 <ul for="subject_select" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
-                                                    <li class="mdl-menu__item" id="History" onClick="set_subject(this.id)">History</li>
-                                                    <li class="mdl-menu__item" id="Literature" onClick="set_subject(this.id)">Literature</li>
-                                                    <li class="mdl-menu__item" id="Chemistry" onClick="set_subject(this.id)">Chemistry</li>
-                                                    <li class="mdl-menu__item" id="Music" onClick="set_subject(this.id)">Music</li>
-                                                    <li class="mdl-menu__item" id="Art" onClick="set_subject(this.id)">Art</li>
-                                                    <li class="mdl-menu__item" id="Other" onClick="set_subject(this.id)">Other</li>
+                                                    <li class="mdl-menu__item" id="History" onClick="set_subject(1)">History</li>
+                                                    <li class="mdl-menu__item" id="Literature" onClick="set_subject(2)">Literature</li>
+                                                    <li class="mdl-menu__item" id="Chemistry" onClick="set_subject(3)">Chemistry</li>
+                                                    <li class="mdl-menu__item" id="Music" onClick="set_subject(4)">Music</li>
+                                                    <li class="mdl-menu__item" id="Art" onClick="set_subject(5)">Art</li>
+                                                    <li class="mdl-menu__item" id="Other" onClick="set_subject(6)">Other</li>
                                                 </ul>
                                         </div>
                                         <!-- Title Textfield -->
@@ -217,7 +217,10 @@ limitations under the License.
 
     //Sets the subject based on the user input on the drop-down menu
     function set_subject(category) {
-        subject = category;
+        if(category == 1) {
+            subject = "History";
+        }
+        //subject = category;
         console.log("subject = " + subject);
     }
 </script>
