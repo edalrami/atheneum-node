@@ -390,12 +390,15 @@ limitations under the License.
        if($("#downloaderAddress").val() != null){
            myWallet = $("#downloaderAddress").val();
            var balance = web3.eth.getBalance(myWallet,function(error, result){
+               
                 if(!error){
                     console.log("YOUR BALANCE "+ result);
                  }else{
                     console.log("COULDNT GET BALANCE "+error);
-            }
-        });
+                }
+            });
+            contractInstance.getUploader("0x39da84129C72CC8E2b7d94D9742B0c44b17955aa");
+            contractInstance.pay(myWallet);
        } 
     });
     
