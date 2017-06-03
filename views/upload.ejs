@@ -221,7 +221,20 @@ limitations under the License.
         subject = "History";
         console.log("WORK DAMMIT: "+subject);
     })
-   
+    //Sets the subject based on the user input on the drop-down menu
+    function set_subject(category) {
+        console.log("set subject called, argument = " + category);
+        switch(category) {
+            case 1:
+                subject = "History";
+                break;
+            case 2:
+                subject = "Literature";
+                break;
+        }
+        //subject = category;
+        console.log("subject = " + subject);
+    }
 </script>
 
 </body>
