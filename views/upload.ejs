@@ -121,7 +121,7 @@ limitations under the License.
                                         <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label getmdl-select getmdl-select__fullwidth">
                                             <input class="mdl-textfield__input" type="text" id="subject_select" value="Subject" readonly tabIndex="-1">
                                                 <ul for="subject_select" class="mdl-menu mdl-menu--bottom-left mdl-js-menu">
-                                                    <li class="mdl-menu__item" id="History" onClick="set_subject(1)">History</li>
+                                                    <li class="mdl-menu__item" id="History">History</li>
                                                     <li class="mdl-menu__item" id="Literature" onClick="set_subject(2)">Literature</li>
                                                     <li class="mdl-menu__item" id="Chemistry" onClick="set_subject(3)">Chemistry</li>
                                                     <li class="mdl-menu__item" id="Music" onClick="set_subject(4)">Music</li>
@@ -216,20 +216,12 @@ limitations under the License.
            });
     }
 
-    //Sets the subject based on the user input on the drop-down menu
-    function set_subject(category) {
-        console.log("set subject called, argument = " + category);
-        switch(category) {
-            case 1:
-                subject = "History";
-                break;
-            case 2:
-                subject = "Literature";
-                break;
-        }
-        //subject = category;
-        console.log("subject = " + subject);
-    }
+
+    $("#History").click(function{
+        subject = "History";
+        console.log("WORK DAMMIT: "+subject);
+    })
+   
 </script>
 
 </body>
