@@ -372,13 +372,12 @@ limitations under the License.
                 'loc': snapshot.val().loc,
                 'owner': snapshot.val().owner,
                 'category': snapshot.val().category,
-                upvotes: new_count
+                'desc': snapshot.val().desc,
+                'upvotes': new_count
             });
         console.log(snapshot.val().upvotes);
         });
     }
-    
-   
     
     function displayModal(){
       var inst = $('[data-remodal-id=modal]').remodal();

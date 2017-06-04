@@ -67,6 +67,7 @@ limitations under the License.
       <!-- Navigation -->
       <nav class="mdl-navigation">
         <a class="mdl-navigation__link mdl-color-text--yellow-A700" id = "login_button">Login</a>
+        <a class="mdl-navigation__link mdl-color-text--yellow-A700" id = "signup_button">SignUp</a>
         <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="http://www.weekinethereum.com/">News</a>
         <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="https://www.coinbase.com/">Coinbase</a>
       </nav>
@@ -86,28 +87,38 @@ limitations under the License.
     <div class="page-content">
       
       
-       <!--------Modal Popup---------->
+       <!--------Modal Popup for Login---------->
                 <div class="remodal" data-remodal-id="modal">
                     <button data-remodal-action="close" class="remodal-close"></button>
                     
-                    <div id="signUpWrapper">
-                    <input type="text" id="signup_email" placeholder="email"/><br/>
-                    <input type="password" id="signup_password" placeholder="password" /><br/>
-                    <input type="text" id="wallet_addr" placeholder="Ethereum Wallet Address"/><br/>
-                    <input type="password" id="wallet_pass" placeholder="Ethereum Wallet Password"/><br/>
-                    <button onclick="signUp()">Create Account</button>
-                    <div id="errorMessage"></div>
-                </div>
-                <input type="text" id="login_email" placeholder="email"/><br/>
-                <input type="password" id="login_password" placeholder="password" /><br/>
-                <button onclick="signIn()">Log In</button>
-                    
                     <h1>Login</h1>
-                    <p>Login</p>
+                    <input type="text" id="login_email" placeholder="email"/><br/>
                     <br>
+                    <input type="password" id="login_password" placeholder="password" /><br/>
                     <br>
                     <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
-                    <button id ="downloadButton"data-remodal-action="confirm" class="remodal-confirm">Download</button>
+                    <button id ="confirm_login"data-remodal-action="confirm" class="remodal-confirm">Login</button>
+                </div>
+                
+       <!--------Modal Popup for Signup---------->
+                <div class="remodal" data-remodal-id="modal2">
+                    <button data-remodal-action="close" class="remodal-close"></button>
+                    
+                    
+                    <h1>Create Account</h1>
+                    <div id="signUpWrapper">
+                    <input type="text" id="signup_email" placeholder="email"/><br/>
+                    <br>
+                    <input type="password" id="signup_password" placeholder="password" /><br/>
+                    <br>
+                    <input type="text" id="wallet_addr" placeholder="Ethereum Wallet Address"/><br/>
+                    <br>
+                    <input type="password" id="wallet_pass" placeholder="Ethereum Wallet Password"/><br/>
+                    <div id="errorMessage"></div>
+                    </div>
+                    <br>
+                    <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
+                    <button id ="confirm_signup"data-remodal-action="confirm" class="remodal-confirm">SignUp</button>
                 </div>
       
       
@@ -128,13 +139,21 @@ limitations under the License.
 </div>
 
 <script>
-  $("#login_button").click(function() {
-    var inst = $('[data-remodal-id=modal]').remodal();
-      inst.open();
-      console.log("MODAL IS DISPLAYING")
-  })
+            $("#login_button").click(function() {
+                var inst = $('[data-remodal-id=modal]').remodal();
+                inst.open();
+                console.log("MODAL IS DISPLAYING")
+            })
+            
+            $("#signup_button").click(function() {
+                var inst = $('[data-remodal-id=modal2]').remodal();
+                inst.open();
+                console.log("MODAL IS DISPLAYING")
+            })
+            
+            
   
-  function signUp(){
+            $("#confirm_signup").click(function(){
                 var email = $('#signup_email').val();
                 var pass = $('#signup_password').val();
                 firebase.auth().createUserWithEmailAndPassword(email, pass).catch(function(error){
@@ -144,9 +163,11 @@ limitations under the License.
                     $("#errorMessage").html(errorMessage);
                 });
                 check_account(email);
-            }
+            })
+               
+            
 
-            function signIn(){
+            $("#confirm_login").click(function(){
                 var email = $('#login_email').val();
                 var pass = $('#login_password').val();
                 firebase.auth().signInWithEmailAndPassword(email, pass).catch(function(error){
@@ -154,7 +175,9 @@ limitations under the License.
                     var errorCode = error.code;
                     console.log(errorMessage);
                 });
-            }
+            });
+            
+           
 
             function check_account(email) {
               var database = firebase.database();
