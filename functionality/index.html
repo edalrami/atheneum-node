@@ -77,46 +77,141 @@ limitations under the License.
       <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="upload.html">Upload</a>
       <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="download.html">Browse Files</a>
       <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="index.html">My Account</a>
-      <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="">Sign Out</a>
+      <a class="mdl-navigation__link mdl-color-text--yellow-A700" id="sign_out">Sign Out</a>
     </nav>
   </div>
   <main class="mdl-layout__content">
-    <div class="page-content"><!-- Your content goes here --></div>
+    <div class="page-content">
+                <!-- Your content goes here -->
+                <div id="signUpWrapper">
+                    <input type="text" id="signup_email" placeholder="email"/><br/>
+                    <input type="password" id="signup_password" placeholder="password" /><br/>
+                    <input type="text" id="wallet_addr" placeholder="Ethereum Wallet Address"/><br/>
+                    <input type="password" id="wallet_pass" placeholder="Ethereum Wallet Password"/><br/>
+                    <button onclick="signUp()">Create Account</button>
+                    <div id="errorMessage"></div>
+                </div>
+                <input type="text" id="login_email" placeholder="email"/><br/>
+                <input type="password" id="login_password" placeholder="password" /><br/>
+                <button onclick="signIn()">Log In</button>
+            </div>
   </main>
 </div>
 
 
 <script>
-    $(document).ready(function() {
-        var storage = firebase.storage();
-        var storageRef = storage.ref();
-        var fileToUpload
-        var uploadRef
 
-
-        function uploadToFirebase(file) {
-            uploadRef = storageRef.child("testUploads/"+file.name)
-
-            console.log(fileToUpload)
-
-            return uploadRef.put(file).then(function(snapshot) {
-                console.log("NEW DOWNLOAD URL: "+snapshot.downloadURL)
-                $("#linkbox").html(snapshot.downloadURL)
-            })
-        }
-
-
-        $("#submitButton").click(function() {
-            if($("#fileInput").val()) {
-                fileToUpload = document.querySelector("[name='fileInput']").files[0]
-                uploadToFirebase(fileToUpload)
-
+            function signUp(){
+                var email = $('#signup_email').val();
+                var pass = $('#signup_password').val();
+                firebase.auth().createUserWithEmailAndPassword(email, pass).catch(function(error){
+                    var errorMessage = error.message;
+                    var errorCode = error.code;
+                    console.log(errorMessage);
+                    $("#errorMessage").html(errorMessage);
+                });
+                check_account(email);
             }
-        })
 
-    })
+            function signIn(){
+                var email = $('#login_email').val();
+                var pass = $('#login_password').val();
+                firebase.auth().signInWithEmailAndPassword(email, pass).catch(function(error){
+                    var errorMessage = error.message;
+                    var errorCode = error.code;
+                    console.log(errorMessage);
+                });
+            }
 
+            function check_account(email) {
+              var database = firebase.database();
+              var user = firebase.auth().currentUser;
+              found = false;
+              //db_ref points to the file tab in the DB
+              var db_ref = database.ref("users");
+              db_ref.once('value').then(function(snapshot) {
+                snapshot.forEach(function(child) {
+                  var child_key = child.key;
+                  var child_data = child.val();
+                  //check if current user exists in the user DB
+                  if(child_data.email == email) {
+                    //match was found, do nothing
+                    console.log("email found: " + email);
+                    found = true;
+                  }
+                })
+                if(!found) {
+                  //add the user in the database
+                  var new_user_ref = db_ref.push();
+                  var wallet_addr = $('#wallet_addr').val();
+                  var wallet_pass = $('#wallet_pass').val();
+                  //Default DB entry
+                  new_user_ref.set({
+                      'email': email,
+                      'wallet_addr': wallet_addr,
+                      'wallet_pass': wallet_pass
+                  });
+                  console.log("new user added to DB");
+                  database.ref()
+                }
+              })
+            }
+
+
+function pull_db(tag) {
+        var file_list = document.getElementById('file_list_'+tag);
+        file_list.innerHTML = "";
+        //.once polls the database one time
+        db_ref.once('value').then(function(snapshot) {
+            //go through each element from the 'files' tab in the DB
+            snapshot.forEach(function(child) {
+                var child_key = child.key;
+                var child_data = child.val();
+                //add buttons 
+                var up = "up";
+                var down = "down";
+                if(child_data.category === tag || tag == "All") {
+                    console.log("There was a match with the tag: " + tag);
+                    //orderByChild by default orders the DB in ascending order, so as the votecount increases, it will move down the list
+                    file_list.innerHTML = file_list.innerHTML + "<button class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, -1)\"> + </button>";
+                    file_list.innerHTML = file_list.innerHTML + "&nbsp; &nbsp;";
+                    file_list.innerHTML = file_list.innerHTML + "<button class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, 1)\"> - </button>";
+                    file_list.innerHTML = file_list.innerHTML + '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;';
+                    //display the file names and have them link to their cloud storage location
+                    file_list.innerHTML = file_list.innerHTML + '<a href="' + child_data.loc + '">' + child_data.name;
+                    file_list.innerHTML = file_list.innerHTML + '<br>';
+                }
+            })
+        });
+    }
+
+
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    // User is signed in.
+                    console.log("Signed in");
+                    //window.location = "../download.html";
+                } else {
+                    // No user is signed in.
+                    console.log("Not signed in");
+                }
+            });
+
+            $("#sign_out").click(function() {
+              console.log("signing out");
+              firebase.auth().signOut().then(function(){
+                    //signed out successful
+                    $("main").html("Signed out");
+                }).catch(function(error){
+                    //something went wrong
+                    $("main").html("Not signed out");
+              //get the current user 
+              //sign them out from firebase
+            });
+            });
 </script>
+
+
 </body>
 </html>
 
