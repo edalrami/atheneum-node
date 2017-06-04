@@ -89,7 +89,20 @@ limitations under the License.
        <!--------Modal Popup---------->
                 <div class="remodal" data-remodal-id="modal">
                     <button data-remodal-action="close" class="remodal-close"></button>
-                    <h1>Confirm Download</h1>
+                    
+                    <div id="signUpWrapper">
+                    <input type="text" id="signup_email" placeholder="email"/><br/>
+                    <input type="password" id="signup_password" placeholder="password" /><br/>
+                    <input type="text" id="wallet_addr" placeholder="Ethereum Wallet Address"/><br/>
+                    <input type="password" id="wallet_pass" placeholder="Ethereum Wallet Password"/><br/>
+                    <button onclick="signUp()">Create Account</button>
+                    <div id="errorMessage"></div>
+                </div>
+                <input type="text" id="login_email" placeholder="email"/><br/>
+                <input type="password" id="login_password" placeholder="password" /><br/>
+                <button onclick="signIn()">Log In</button>
+                    
+                    <h1>Login</h1>
                     <p>Login</p>
                     <br>
                     <br>
@@ -119,7 +132,78 @@ limitations under the License.
     var inst = $('[data-remodal-id=modal]').remodal();
       inst.open();
       console.log("MODAL IS DISPLAYING")
-  })  
+  })
+  
+  function signUp(){
+                var email = $('#signup_email').val();
+                var pass = $('#signup_password').val();
+                firebase.auth().createUserWithEmailAndPassword(email, pass).catch(function(error){
+                    var errorMessage = error.message;
+                    var errorCode = error.code;
+                    console.log(errorMessage);
+                    $("#errorMessage").html(errorMessage);
+                });
+                check_account(email);
+            }
+
+            function signIn(){
+                var email = $('#login_email').val();
+                var pass = $('#login_password').val();
+                firebase.auth().signInWithEmailAndPassword(email, pass).catch(function(error){
+                    var errorMessage = error.message;
+                    var errorCode = error.code;
+                    console.log(errorMessage);
+                });
+            }
+
+            function check_account(email) {
+              var database = firebase.database();
+              var user = firebase.auth().currentUser;
+              found = false;
+              //db_ref points to the file tab in the DB
+              var db_ref = database.ref("users");
+              db_ref.once('value').then(function(snapshot) {
+                snapshot.forEach(function(child) {
+                  var child_key = child.key;
+                  var child_data = child.val();
+                  //check if current user exists in the user DB
+                  if(child_data.email == email) {
+                    //match was found, do nothing
+                    console.log("email found: " + email);
+                    found = true;
+                  }
+                })
+                if(!found) {
+                  //add the user in the database
+                  var new_user_ref = db_ref.push();
+                  var wallet_addr = $('#wallet_addr').val();
+                  var wallet_pass = $('#wallet_pass').val();
+                  //Default DB entry
+                  new_user_ref.set({
+                      'email': email,
+                      'wallet_addr': wallet_addr,
+                      'wallet_pass': wallet_pass
+                  });
+                  console.log("new user added to DB");
+                  database.ref()
+                }
+              })
+            }
+
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    // User is signed in.
+                    console.log("Signed in");
+                    //window.location = "../download.html";
+                } else {
+                    // No user is signed in.
+                    console.log("Not signed in");
+                }
+            });
+  
+  
+  
+  
 </script>
 
 </body>

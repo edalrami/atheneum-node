@@ -90,7 +90,7 @@ limitations under the License.
             <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="upload">Upload</a>
             <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="download">Browse Files</a>
             <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="index">My Account</a>
-            <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="">Sign Out</a>
+            <a class="mdl-navigation__link mdl-color-text--yellow-A700" id="sign_out">Sign Out</a>
         </nav>
     </div>
     <main class="mdl-layout__content mdl-color--blue-grey-800">
@@ -415,8 +415,18 @@ limitations under the License.
        } 
     });
     
-
-    
+    $("#sign_out").click(function() {
+              console.log("signing out");
+              firebase.auth().signOut().then(function(){
+                    //signed out successful
+                    $("main").html("Signed out");
+                }).catch(function(error){
+                    //something went wrong
+                    $("main").html("Not signed out");
+              //get the current user 
+              //sign them out from firebase
+            });
+            });
 
 </script>
 </body>
