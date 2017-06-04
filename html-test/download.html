@@ -30,6 +30,7 @@ limitations under the License.
     <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.8.0/firebase-storage.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.1.0/firebase-database.js"></script>
 
     <!-- JQUERY -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -65,17 +66,17 @@ limitations under the License.
         </div>
         <!-- Tabs -->
         <div class="mdl-layout__tab-bar mdl-js-ripple-effect">
-            <a href="#scroll-tab-1" class="mdl-layout__tab is-active mdl-color-text--yellow-A700">All</a>
-            <a href="#scroll-tab-2" class="mdl-layout__tab mdl-color-text--yellow-A700">History</a>
-            <a href="#scroll-tab-3" class="mdl-layout__tab mdl-color-text--yellow-A700">Literature</a>
-            <a href="#scroll-tab-4" class="mdl-layout__tab mdl-color-text--yellow-A700">Chemistry</a>
-            <a href="#scroll-tab-5" class="mdl-layout__tab mdl-color-text--yellow-A700">Music</a>
-            <a href="#scroll-tab-6" class="mdl-layout__tab mdl-color-text--yellow-A700">Art</a>
+            <a href="#scroll-tab-1" id="All" class="mdl-layout__tab is-active mdl-color-text--yellow-A700">All</a>
+            <a href="#scroll-tab-2" id="History" class="mdl-layout__tab mdl-color-text--yellow-A700">History</a>
+            <a href="#scroll-tab-3" id="Literature" class="mdl-layout__tab mdl-color-text--yellow-A700">Literature</a>
+            <a href="#scroll-tab-4" id="Chemistry" class="mdl-layout__tab mdl-color-text--yellow-A700">Chemistry</a>
+            <a href="#scroll-tab-5" id="Music" class="mdl-layout__tab mdl-color-text--yellow-A700">Music</a>
+            <a href="#scroll-tab-6" id="Art" class="mdl-layout__tab mdl-color-text--yellow-A700">Art</a>
         </div>
     </header>
     <style type='text/css'>
 
-        .mdl-layout .mdl-layout__drawer-button {
+        .mdl-layout .mdl-layout__drawer-button .mdl-layout__tab-panel .mdl-card__supporting-text .mdl-card__title .mdl-card{
             color: #FFD600;
         }
 
@@ -95,7 +96,7 @@ limitations under the License.
 
         .mdl-card--horizontal {
             flex-direction: column;
-            height: 1vh; /* 1 */
+            height: 1vh;
             padding-left: 150px;
             width: 100%;
 
@@ -111,32 +112,8 @@ limitations under the License.
             }
         }
 
-        .mdl-card--horizontal-2 {
-            flex-direction: row;
-            flex-wrap: wrap;
-            min-height: 0px;
 
-            .mdl-card__title {
-                align-items: flex-start;
-                flex-direction: column;
-                flex: 1 auto;
-                float: left;
-            }
-            .mdl-card__title-text {
-                align-self: flex-start;
-            }
-            .mdl-card__media {
-                flex: 0 auto;
-                float: right;
-                height: 112px;
-                margin: 16px 16px 0 0;
-                width: 112px;
-            }
-            .mdl-card__actions {
-                clear: both;
-                flex: 1 auto;
-            }
-        }
+
     </style>
     <div class="mdl-layout__drawer mdl-color-text--yellow-A700 mdl-color--blue-grey-800">
         <span class="mdl-layout-title mdl-color-text--yellow-A700">Atheneum</span>
@@ -144,89 +121,160 @@ limitations under the License.
             <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="upload.html">Upload</a>
             <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="download.html">Browse Files</a>
             <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="index.html">My Account</a>
-            <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="">Sign Out</a>
+            <a class="mdl-navigation__link mdl-color-text--yellow-A700" id="sign_out">Sign Out</a>
         </nav>
     </div>
-    <main class="mdl-layout__content  mdl-color--grey-100">
-        <section class="mdl-layout__tab-panel is-active mdl-color-text--yellow-A700" id="scroll-tab-1">
+    <main class="mdl-layout__content mdl-color--blue-grey-800">
+        <!-- "All" tab -->
+        <section class="mdl-layout__tab-panel is-active mdl-color-text--grey-600 mdl-color--blue-grey-800" id="scroll-tab-1">
             <div class="page-content">
-                <!-- Your content goes here -->
-                <!-- Set a grid to center the card -->
-                <div class="mdl-grid">
-                    <div class="mdl-layout-spacer"></div>
-                    <div class="mdl-cell mdl-cell--8-col">
-                        <!-- Create card -->
-                        <div class="mdl-layout mdl-js-layout" >
-                            <main class="mdl-layout__content">
-                                <div class="mdl-card mdl-shadow--2dp demo-mdl-card--horizontal">
-                                    <div class="mdl-card__title">
-                                        <h2 class="mdl-card__title-text">Title</h2>
-                                    </div>
-                                    <div class="mdl-card__supporting-text">
-                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                        Mauris sagittis pellentesque lacus eleifend lacinia...
-                                    </div>
-                                    <div class="mdl-card__actions mdl-card--border">
-                                        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" data-upgraded=",MaterialButton,MaterialRipple">Download</a>
-                                    </div>
-                                    <div class="mdl-card__menu">
-                                        <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" data-upgraded=",MaterialButton,MaterialRipple"><i class="material-icons">info</i></button>
-                                    </div>
-                                </div>
-                            </main>
-                        </div>
-
-                    </div>
+                <div id="file_list_All" class="mdl-grid mdl-cell--12-col">
+                    <p> </p>
                 </div>
-                <div class="mdl-layout-spacer"></div>
             </div>
         </section>
+        <!-- "History" tab -->
         <section class="mdl-layout__tab-panel" id="scroll-tab-2">
-            <div class="page-content"><!-- Your content goes here --></div>
+            <div class="page-content">
+                <div id="file_list_History" class="mdl-grid mdl-cell--12-col">
+                    <p> </p>
+                </div>
+            </div>
         </section>
+        <!-- "Literature" tab -->
         <section class="mdl-layout__tab-panel" id="scroll-tab-3">
-            <div class="page-content"><!-- Your content goes here --></div>
+            <div class="page-content">
+                <div id="file_list_Literature" class="mdl-grid mdl-cell--12-col">
+                    <p> </p>
+                </div>
+            </div>
         </section>
+        <!-- "Chemistry" tab -->
         <section class="mdl-layout__tab-panel" id="scroll-tab-4">
-            <div class="page-content"><!-- Your content goes here --></div>
+            <div class="page-content">
+                <div id="file_list_Chemistry" class="mdl-grid mdl-cell--12-col">
+                    <p> </p>
+                </div>
+            </div>
         </section>
-        <section class="mdl-layout__tab-panel" id="scroll-tab-5">
-            <div class="page-content"><!-- Your content goes here --></div>
+        <!-- "Music" tab -->
+        <section class="mdl-layout__tab-panel is-active mdl-color-text--grey-600 mdl-color--blue-grey-800" id="scroll-tab-5">
+            <div class="page-content">
+                <div id="file_list_Music" class="mdl-grid mdl-cell--12-col">
+                    <p> </p>
+                </div>
+            </div>
         </section>
+        <!-- "Art" tab -->
         <section class="mdl-layout__tab-panel" id="scroll-tab-6">
-            <div class="page-content"><!-- Your content goes here --></div>
+            <div class="page-content">
+                <div id="file_list_Art" class="mdl-grid mdl-cell--12-col">
+                  <p> </p>
+                </div>
+            </div>
         </section>
     </main>
 </div>
 <script>
-    $(document).ready(function() {
-        var storage = firebase.storage();
-        var storageRef = storage.ref();
-        var fileToUpload
-        var uploadRef
+    var auth = firebase.auth();
+    var database = firebase.database();
+    //db_ref points to the file tab in the DB
+    var db_ref = database.ref("files").orderByChild('upvotes');
+    var storage = firebase.storage();
+    var storageRef = storage.ref();
 
 
-        function uploadToFirebase(file) {
-            uploadRef = storageRef.child("testUploads/"+file.name)
+    //Display list of files uploaded
+    window.onload = function() {
+        pull_db("All");
+        document.getElementById("All").addEventListener("click", function(){
+            pull_db("All");
+            console.log("All pressed"); 
+        });
+        document.getElementById("History").addEventListener("click", function(){
+            pull_db("History");
+            console.log("History pressed"); 
+        });
+        document.getElementById("Literature").addEventListener("click", function(){
+            pull_db("Literature");
+            console.log("Literature pressed"); 
+        });
+        document.getElementById("Chemistry").addEventListener("click", function(){
+            pull_db("Chemistry");
+            console.log("Chemistry pressed"); 
+        });
+        document.getElementById("Music").addEventListener("click", function(){
+            pull_db("Music");
+            console.log("Music pressed"); 
+        });
+        document.getElementById("Art").addEventListener("click", function(){
+            pull_db("Art");
+            console.log("Art pressed"); 
+        });
+    }
 
-            console.log(fileToUpload)
-
-            return uploadRef.put(file).then(function(snapshot) {
-                console.log("NEW DOWNLOAD URL: "+snapshot.downloadURL)
-                $("#linkbox").html(snapshot.downloadURL)
+    //Access the firebase DB and return all files that have the same category as the argument
+    function pull_db(tag) {
+        var file_list = document.getElementById('file_list_'+tag);
+        file_list.innerHTML = "";
+        //.once polls the database one time
+        db_ref.once('value').then(function(snapshot) {
+            //go through each element from the 'files' tab in the DB
+            snapshot.forEach(function(child) {
+                var child_key = child.key;
+                var child_data = child.val();
+                //add buttons 
+                var up = "up";
+                var down = "down";
+                if(child_data.category === tag || tag == "All") {
+                    console.log("There was a match with the tag: " + tag);
+                    //orderByChild by default orders the DB in ascending order, so as the votecount increases, it will move down the list
+                    var content = "<div class=\"mdl-cell mdl-cell--4-col\">";
+                    content += "<div class=\"mdl-card mdl-shadow--2dp demo-mdl-card--horizontal\">";
+                    content += "<div class=\"mdl-card__title\">";
+                    content += "<h2 class=\"mdl-card__title-text\">"+child_data.name+"</h2>";
+                    content += "</div>";
+                    content += "<div class=\"mdl-card__supporting-text\">"+"child_data.desc"+"</div>";
+                    content += "<div class=\"mdl-card__actions mdl-card--border\">";
+                    content += "<a class=\"mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect\" data-upgraded=\",MaterialButton,MaterialRipple\">Download</a>";
+                    content += "</div>";
+                    content += "</div>";
+                    content += "</div>";
+                    file_list.innerHTML = file_list.innerHTML + content;
+                }
             })
-        }
+        });
+    }
 
+    //Change the votes value of a specific file
+    function vote(key, vote){
+        var db_ref = firebase.database().ref("files/"+key);
+        db_ref.once("value").then(function(snapshot) {
+            var new_count = snapshot.val().upvotes + vote; // {first:"Ada",last:"Lovelace"}
+            console.log(new_count);
+            db_ref.set({
+                'name': snapshot.val().name,
+                'loc': snapshot.val().loc,
+                'owner': snapshot.val().owner,
+                'category': snapshot.val().category,
+                upvotes: new_count
+            });
+        console.log(snapshot.val().upvotes);
+        });
+    }
 
-        $("#submitButton").click(function() {
-            if($("#fileInput").val()) {
-                fileToUpload = document.querySelector("[name='fileInput']").files[0]
-                uploadToFirebase(fileToUpload)
-
-            }
-        })
-
-    })
+    $("#sign_out").click(function() {
+              console.log("signing out");
+              firebase.auth().signOut().then(function(){
+                    //signed out successful
+                    $("main").html("Signed out");
+                }).catch(function(error){
+                    //something went wrong
+                    $("main").html("Not signed out");
+              //get the current user 
+              //sign them out from firebase
+            });
+            });
 
 </script>
 </body>
