@@ -213,7 +213,8 @@ limitations under the License.
                 'upvotes': 0,
                 'owner': uploader,
                 'category': subject,
-                'desc': document.getElementById('file_description').value
+                'desc': document.getElementById('file_description').value,
+                'downloader_list': ''
             });
             console.log('File available at', url);
             database.ref()

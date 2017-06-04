@@ -26,29 +26,22 @@ contract mortal{
 	}
 }
 
-contract getUploader is mortal{
-    
-	mapping(address=>Uploader) public uploaders;
+contract payUploader is mortal{
 
-	struct Uploader{
-		bool active;
-		uint256 cost;
-	}
+    uint256 cost = 50000000000000000;
 
-    //Note: cost is set to 1 ETH which is equivalent to 1*10^(17) 
+    //Note: cost is set to 0.5 ETH which is equivalent to 5*10^(16) 
     //To test the payments of microtransactions, the cost may be subject to change
     //after further testing
-	function getUploader(address _uploaderAddress){
-		uploaders[_uploaderAddress] = Uploader({
-		active: true,
-		cost: 100000000000000000
-		});
-	}
-
-	function pay(address _uploaderAddress) payable{
-
-	    if(!_uploaderAddress.send(uploadersp[_uploaderAddress].cost)){
+	function payUploader(address _uploaderAddress) payable{
+        
+	    if(!_uploaderAddress.send(cost)){
 	    	throw;
 	    }
 	}
 }
+
+
+
+
+

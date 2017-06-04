@@ -211,10 +211,23 @@ limitations under the License.
     var db_ref = database.ref("files").orderByChild('upvotes');
     var storage = firebase.storage();
     var storageRef = storage.ref();
+    var current_user;     //Variable to store username
+    var user_password;    //Variable to store user's Ethereum wallet password 
+    var user_wallet;      //Variable to store user's Ethereum wallet address
+    var global_child;     //Variable to store file id
+    
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+          // User is signed in.
+          current_user = user.email;
+      } else {
+            // No user is signed in.
+      }
+    });
     
     //NOTE: If you're going to test the server app on heroku then use metamask so it injects web3
-    //Initialize web3 instance...if MetaMask is installed as a plugin, then metamask will automaticall inject web3
-    //Otherwise set new web3 provider to the local host. Local host can vary. 
+    //Initialize web3 instance...if MetaMask is installed as a plugin, then metamask will automaticaly inject web3
+    //Otherwise set new web3 provider to the local host. Local host set to heroku app server. 
     if (typeof web3 !== 'undefined') {
         web3 = new Web3(web3.currentProvider);
     } else {
@@ -354,7 +367,7 @@ limitations under the License.
                     file_list.innerHTML = file_list.innerHTML + '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;';
                     //display the file names and have them link to their cloud storage location
                     //file_list.innerHTML = file_list.innerHTML + '<a href="#modal' + child_data.loc + '">' + child_data.name;
-                    file_list.innerHTML = file_list.innerHTML + '<a onClick=\"displayModal()\">' + child_data.name;
+                    file_list.innerHTML = file_list.innerHTML + '<a id =\"'+child_key+'\" onClick=\"displayModal(this.id)\">'+ child_data.name;
                     file_list.innerHTML = file_list.innerHTML + '<br>';
                 }
             })
@@ -379,40 +392,87 @@ limitations under the License.
         });
     }
     
-    function displayModal(){
+    function displayModal(child){
+      console.log(child);
       var inst = $('[data-remodal-id=modal]').remodal();
       inst.open();
       console.log("MODAL IS DISPLAYING")
+      get_user_info(current_user)
+      global_child = child;
+      console.log("global_child: "+global_child);
     }
     
     $("#downloadButton").click(function() {
-       if($("#downloaderAddress").val() != null){
-           myWallet = $("#downloaderAddress").val();
-           var balance = web3.eth.getBalance(myWallet,function(error, result){
+    //   if($("#downloaderAddress").val() != null){
+    //       myWallet = $("#downloaderAddress").val();
+    //       var balance = web3.eth.getBalance(myWallet,function(error, result){
                
-                if(!error){
-                    console.log("YOUR BALANCE "+ result);
-                 }else{
-                    console.log("COULDNT GET BALANCE "+error);
-                }
-            });
-            contractInstance.uploaders("0x39da84129C72CC8E2b7d94D9742B0c44b17955aa", function(error, result){
-                if(!error){
-                    console.log("MAKING PAYMENT TO " + result);
-                }else{
-                    console.log("ADDRESS GRAB FAILED " + error)
-                }
-            });
+    //             if(!error){
+    //                 console.log("YOUR BALANCE "+ result);
+    //              }else{
+    //                 console.log("COULDNT GET BALANCE "+error);
+    //             }
+    //         });
+    //         contractInstance.uploaders("0x39da84129C72CC8E2b7d94D9742B0c44b17955aa", function(error, result){
+    //             if(!error){
+    //                 console.log("MAKING PAYMENT TO " + result);
+    //             }else{
+    //                 console.log("ADDRESS GRAB FAILED " + error)
+    //             }
+    //         });
             
-            contractInstance.pay(myWallet, function(error, result){
-                if(!error){
-                    console.log("PAYMENT SENT " + result);
-                }else{
-                    console.log("PAYMENT LOST IN OBLIVION: "+ error);
-                }
-            });
-       } 
+    //         contractInstance.pay(myWallet, function(error, result){
+    //             if(!error){
+    //                 console.log("PAYMENT SENT " + result);
+    //             }else{
+    //                 console.log("PAYMENT LOST IN OBLIVION: "+ error);
+    //             }
+    //         });
+    //   }
+       add_downloader(current_user, global_child)
+       
     });
+    
+    function add_downloader(email, file_key) {
+        var dl_ref = firebase.database().ref("files/"+file_key);
+        dl_ref.once("value").then(function(snapshot) {
+            
+            var match = false;
+            var user_list = snapshot.val().downloader_list.split(";");
+            if(user_list.length == 1) {
+                match = false;
+            }
+            
+            for (var i = 0; i < user_list.length; i++) {
+                console.log(user_list[i]);
+                if(user_list[i].localeCompare(email) == 0) {
+                    //match is found
+                    
+                    match = true;
+                    
+                    
+                }
+            }
+            
+            if (match == false) {
+                console.log("FALSE");
+                new_dl_list = snapshot.val().downloader_list + email + ";";
+            } else {
+                console.log("TRUE");
+                new_dl_list = snapshot.val().downloader_list;
+            }
+            dl_ref.set({
+                'name': snapshot.val().name,
+                'loc': snapshot.val().loc,
+                'owner': snapshot.val().owner,
+                'category': snapshot.val().category,
+                'desc': snapshot.val().desc,
+                'upvotes': snapshot.val().upvotes,
+                'downloader_list': new_dl_list
+            });
+        });
+    }
+    
     
     $("#sign_out").click(function() {
               console.log("signing out");
@@ -425,7 +485,34 @@ limitations under the License.
               //get the current user 
               //sign them out from firebase
             });
-            });
+    });
+    
+    
+    //(DEBUG) Given an email, prints all relevant
+    //fields of that user's account
+    function get_user_info(email) {
+        var database_copy = firebase.database();
+        console.log("looking for user with email: " + email);
+        found = false;
+        var users_ref = database_copy.ref("users");
+        users_ref.once('value').then(function(snapshot) {
+            snapshot.forEach(function(child) {
+                var child_key = child.key;
+                var child_data = child.val();
+                if(child_data.email == email) {
+                    
+                    // Match has been found
+                    console.log("Match found!");
+                    
+                    user_wallet = child_data.wallet_addr;
+                    user_password = child_data.wallet_pass;
+                    
+                    console.log("Wallet Address: " + user_wallet);
+                    console.log("Wallet Password: " + user_password);
+                }
+            })
+        })
+    }
 
 </script>
 </body>
