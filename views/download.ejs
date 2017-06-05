@@ -44,6 +44,9 @@ limitations under the License.
     <!------WEB3-------->
     <script src="/web3.js"></script>
     
+    <!-----left pad---->
+     <script src="/leftpad.js"></script>
+    
 
    <!------Initialize Firebase------>
     <script>
@@ -231,79 +234,100 @@ limitations under the License.
     if (typeof web3 !== 'undefined') {
         web3 = new Web3(web3.currentProvider);
     } else {
-    // set the provider you want from Web3.providers
-         web3 = new Web3(new Web3.providers.HttpProvider("http://atheneum-app.herokuapp.com/"));
+    // set the web3 provider to the node provided by Infura with the RPC connection below
+         web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/JZ2u24KnqTjj0qNuNXKk"));
     }    
     
     
     //Address of the current solidity contract deployed the ethereum testnet blockchain
-    var contractAddress = "0xdc6e8e8acBB8290b2D98Ac2f3ccD7750Ff3E3E3b";
+    var contractAddress = "0x726e557485126244ef539b6bef89dee5899b30ca";
     
     
     //Declare Application Binary Interface. Allows for interaction
     //with solidity contract. Makes transactions readable. 
     //Note: See atheneum.sol for the contracts being used and the
     //defined functions handling transactions from the blockchain. 
-    var ABI = [{
-                "constant": false,
-                "inputs": [{
-                    "name": "_uploaderAddress",
-                    "type": "address"
-                }],
-                "name": "pay",
-                "outputs": [],
-                "payable": true,
-                "type": "function"
-            }, {
-                "constant": false,
-                "inputs": [],
-                "name": "kill",
-                "outputs": [],
-                "payable": false,
-                "type": "function"
-            }, {
-                "constant": true,
-                "inputs": [{
-                    "name": "",
-                    "type": "address"
-                }],
-                "name": "uploaders",
-                "outputs": [{
-                    "name": "active",
-                    "type": "bool",
-                    "value": false
-                }, {
-                    "name": "cost",
-                    "type": "uint256",
-                    "value": "0"
-                }],
-                "payable": false,
-                "type": "function"
-            }, {
-                "constant": true,
-                "inputs": [],
-                "name": "owner",
-                "outputs": [{
-                    "name": "",
-                    "type": "address",
-                    "value": "0xb0eab9c6ab4b61604502d87eec0ad07020618bec"
-                }],
-                "payable": false,
-                "type": "function"
-            }, {
-                "inputs": [{
-                    "name": "_uploaderAddress",
-                    "type": "address",
-                    "index": 0,
-                    "typeShort": "address",
-                    "bits": "",
-                    "displayName": "&thinsp;<span class=\"punctuation\">_</span>&thinsp;uploader Address",
-                    "template": "elements_input_address",
-                    "value": ""
-                }],
-                "payable": false,
-                "type": "constructor"
-            }];
+   var ABI= [{
+        "constant": true,
+        "inputs": [],
+        "name": "seller",
+        "outputs": [{
+            "name": "",
+            "type": "address"
+        }],
+        "payable": false,
+        "type": "function"
+    }, {
+        "constant": false,
+        "inputs": [],
+        "name": "abort",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+    }, {
+        "constant": true,
+        "inputs": [],
+        "name": "value",
+        "outputs": [{
+            "name": "",
+            "type": "uint256"
+        }],
+        "payable": false,
+        "type": "function"
+    }, {
+        "constant": true,
+        "inputs": [],
+        "name": "buyer",
+        "outputs": [{
+            "name": "",
+            "type": "address"
+        }],
+        "payable": false,
+        "type": "function"
+    }, {
+        "constant": false,
+        "inputs": [],
+        "name": "confirmReceived",
+        "outputs": [],
+        "payable": false,
+        "type": "function"
+    }, {
+        "constant": true,
+        "inputs": [],
+        "name": "state",
+        "outputs": [{
+            "name": "",
+            "type": "uint8"
+        }],
+        "payable": false,
+        "type": "function"
+    }, {
+        "constant": false,
+        "inputs": [],
+        "name": "confirmPurchase",
+        "outputs": [],
+        "payable": true,
+        "type": "function"
+    }, {
+        "inputs": [],
+        "payable": true,
+        "type": "constructor"
+    }, {
+        "anonymous": false,
+        "inputs": [],
+        "name": "Aborted",
+        "type": "event"
+    }, {
+        "anonymous": false,
+        "inputs": [],
+        "name": "PurchaseConfirmed",
+        "type": "event"
+    }, {
+        "anonymous": false,
+        "inputs": [],
+        "name": "ItemReceived",
+        "type": "event"
+    }]
    
    
    //Create Web3 Contract object with ABI array
@@ -376,6 +400,25 @@ limitations under the License.
 
     //Change the votes value of a specific file
     function vote(key, vote){
+        
+        
+        // var dl_ref = firebase.database().ref("files/"+file_key);
+        // dl_ref.once("value").then(function(snapshot) {
+            
+        //     var match = false;
+        //     var user_list = snapshot.val().downloader_list.split(";");
+        //     if(user_list.length == 1) {
+        //         match = false;
+        //     }
+        //     // Check if user is already a part of the list
+        //     for (var i = 0; i < user_list.length; i++) {
+        //         console.log(user_list[i]);
+        //         if(user_list[i].localeCompare(email) == 0) {
+        //             //match is found
+        //             match = true;
+        //         }
+        //     }
+        
         var db_ref = firebase.database().ref("files/"+key);
         db_ref.once("value").then(function(snapshot) {
             var new_count = snapshot.val().upvotes + vote; // {first:"Ada",last:"Lovelace"}
@@ -404,35 +447,30 @@ limitations under the License.
     
     $("#downloadButton").click(function() {
     //   if($("#downloaderAddress").val() != null){
-    //       myWallet = $("#downloaderAddress").val();
-    //       var balance = web3.eth.getBalance(myWallet,function(error, result){
-               
-    //             if(!error){
-    //                 console.log("YOUR BALANCE "+ result);
-    //              }else{
-    //                 console.log("COULDNT GET BALANCE "+error);
-    //             }
-    //         });
-    //         contractInstance.uploaders("0x39da84129C72CC8E2b7d94D9742B0c44b17955aa", function(error, result){
-    //             if(!error){
-    //                 console.log("MAKING PAYMENT TO " + result);
-    //             }else{
-    //                 console.log("ADDRESS GRAB FAILED " + error)
-    //             }
-    //         });
-            
-    //         contractInstance.pay(myWallet, function(error, result){
-    //             if(!error){
-    //                 console.log("PAYMENT SENT " + result);
-    //             }else{
-    //                 console.log("PAYMENT LOST IN OBLIVION: "+ error);
-    //             }
-    //         });
+    //       var buyer_address = "0x766e03463bA84d870B84a90f4Be761f35F71c1a0";
+    //       //var seller_address = web3.eth
+    //       contractInstance.value = web3.sha3(leftPad((1).toString(16), 64, 0), { encoding: 'hex' }).slice(2);
+    //       console.log(contractInstance.value)
+    //       contractInstance.seller = "0xDF56f2CD41D5AB7caaE414B4C7Adc75a3C4500c2";
+    //       contractInstance.buyer = buyer_address;
+    //       console.log("BUYER :" + buyer_address)
+    //       console.log(contractInstance.seller)
+    //       contractInstance.confirmPurchase(function(error, result){
+    //           if(!error){
+    //               console.log("SOL TEST "+ result);
+    //           }else{
+    //               console.log("SOL FAILED " + error);
+    //           }
+    //       });
+         
     //   }
+       
        add_downloader(current_user, global_child)
        
     });
     
+    // Maintain the list of who has purchased a file
+    // (used to determine who is allowed to vote on a submission)
     function add_downloader(email, file_key) {
         var dl_ref = firebase.database().ref("files/"+file_key);
         dl_ref.once("value").then(function(snapshot) {
@@ -442,22 +480,19 @@ limitations under the License.
             if(user_list.length == 1) {
                 match = false;
             }
-            
+            // Check if user is already a part of the list
             for (var i = 0; i < user_list.length; i++) {
                 console.log(user_list[i]);
                 if(user_list[i].localeCompare(email) == 0) {
                     //match is found
-                    
                     match = true;
-                    
-                    
                 }
             }
-            
+            // If not, append them to the list
             if (match == false) {
                 console.log("FALSE");
                 new_dl_list = snapshot.val().downloader_list + email + ";";
-            } else {
+            } else { // Else, maintain the current list
                 console.log("TRUE");
                 new_dl_list = snapshot.val().downloader_list;
             }
@@ -488,7 +523,7 @@ limitations under the License.
     });
     
     
-    //(DEBUG) Given an email, prints all relevant
+    //(DEBUG) Given an email, print all relevant
     //fields of that user's account
     function get_user_info(email) {
         var database_copy = firebase.database();
