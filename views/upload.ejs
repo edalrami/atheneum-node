@@ -80,7 +80,7 @@ limitations under the License.
         <nav class="mdl-navigation">
             <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="upload">Upload</a>
             <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="download">Browse Files</a>
-            <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="">My Account</a>
+            <a class="mdl-navigation__link mdl-color-text--yellow-A700" href="..">Home</a>
             <a class="mdl-navigation__link mdl-color-text--yellow-A700" id="sign_out">Sign Out</a>
         </nav>
     </div>
@@ -166,6 +166,17 @@ limitations under the License.
     var metadata;
     var subject;
     var user = firebase.auth().currentUser;
+    var current_user;
+    
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+          // User is signed in.
+          current_user = user.email;
+      } else {
+            // No user is signed in.
+            window.location = "../#modal"
+      }
+    });
 
 
     //bind file select function to the upload button
@@ -211,10 +222,10 @@ limitations under the License.
                 'name': upload_file.name,
                 'loc': url,
                 'upvotes': 0,
-                'owner': uploader,
+                'owner': current_user,
                 'category': subject,
                 'desc': document.getElementById('file_description').value,
-                'downloader_list': ''
+                'download_list': ';'
             });
             console.log('File available at', url);
             database.ref()
