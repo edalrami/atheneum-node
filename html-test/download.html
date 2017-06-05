@@ -76,8 +76,12 @@ limitations under the License.
     </header>
     <style type='text/css'>
 
-        .mdl-layout .mdl-layout__drawer-button .mdl-layout__tab-panel .mdl-card__supporting-text .mdl-card__title .mdl-card{
+        .mdl-layout .mdl-layout__drawer-button{
             color: #FFD600;
+        }
+
+        .button {
+            background-color: #FFD600;
         }
 
         .page-content html {
@@ -89,7 +93,7 @@ limitations under the License.
         }
 
         .page-content body {
-            background: #f5f5f5;
+            background: #78909C;
             margin: 50px auto;
             width: 512px;
         }
@@ -124,9 +128,9 @@ limitations under the License.
             <a class="mdl-navigation__link mdl-color-text--yellow-A700" id="sign_out">Sign Out</a>
         </nav>
     </div>
-    <main class="mdl-layout__content mdl-color--blue-grey-800">
+    <main class="mdl-layout__content mdl-color--blue-grey-400">
         <!-- "All" tab -->
-        <section class="mdl-layout__tab-panel is-active mdl-color-text--grey-600 mdl-color--blue-grey-800" id="scroll-tab-1">
+        <section class="mdl-layout__tab-panel is-active mdl-color-text--blue-grey-900 mdl-color--blue-grey-400" id="scroll-tab-1">
             <div class="page-content">
                 <div id="file_list_All" class="mdl-grid mdl-cell--12-col">
                     <p> </p>
@@ -134,7 +138,7 @@ limitations under the License.
             </div>
         </section>
         <!-- "History" tab -->
-        <section class="mdl-layout__tab-panel" id="scroll-tab-2">
+        <section class="mdl-layout__tab-panel is-active mdl-color-text--blue-grey-900 mdl-color--blue-grey-400" id="scroll-tab-2">
             <div class="page-content">
                 <div id="file_list_History" class="mdl-grid mdl-cell--12-col">
                     <p> </p>
@@ -142,7 +146,7 @@ limitations under the License.
             </div>
         </section>
         <!-- "Literature" tab -->
-        <section class="mdl-layout__tab-panel" id="scroll-tab-3">
+        <section class="mdl-layout__tab-panel is-active mdl-color-text--blue-grey-900 mdl-color--blue-grey-400" id="scroll-tab-3">
             <div class="page-content">
                 <div id="file_list_Literature" class="mdl-grid mdl-cell--12-col">
                     <p> </p>
@@ -150,7 +154,7 @@ limitations under the License.
             </div>
         </section>
         <!-- "Chemistry" tab -->
-        <section class="mdl-layout__tab-panel" id="scroll-tab-4">
+        <section class="mdl-layout__tab-panel is-active mdl-color-text--blue-grey-900 mdl-color--blue-grey-400" id="scroll-tab-4">
             <div class="page-content">
                 <div id="file_list_Chemistry" class="mdl-grid mdl-cell--12-col">
                     <p> </p>
@@ -158,7 +162,7 @@ limitations under the License.
             </div>
         </section>
         <!-- "Music" tab -->
-        <section class="mdl-layout__tab-panel is-active mdl-color-text--grey-600 mdl-color--blue-grey-800" id="scroll-tab-5">
+        <section class="mdl-layout__tab-panel is-active mdl-color-text--blue-grey-900 mdl-color--blue-grey-400" id="scroll-tab-5">
             <div class="page-content">
                 <div id="file_list_Music" class="mdl-grid mdl-cell--12-col">
                     <p> </p>
@@ -166,7 +170,7 @@ limitations under the License.
             </div>
         </section>
         <!-- "Art" tab -->
-        <section class="mdl-layout__tab-panel" id="scroll-tab-6">
+        <section class="mdl-layout__tab-panel is-active mdl-color-text--blue-grey-900 mdl-color--blue-grey-400" id="scroll-tab-6">
             <div class="page-content">
                 <div id="file_list_Art" class="mdl-grid mdl-cell--12-col">
                   <p> </p>
@@ -223,6 +227,7 @@ limitations under the License.
             snapshot.forEach(function(child) {
                 var child_key = child.key;
                 var child_data = child.val();
+                var disp_votes = (-1)*child_data.upvotes;
                 //add buttons 
                 var up = "up";
                 var down = "down";
@@ -230,13 +235,18 @@ limitations under the License.
                     console.log("There was a match with the tag: " + tag);
                     //orderByChild by default orders the DB in ascending order, so as the votecount increases, it will move down the list
                     var content = "<div class=\"mdl-cell mdl-cell--4-col\">";
-                    content += "<div class=\"mdl-card mdl-shadow--2dp demo-mdl-card--horizontal\">";
-                    content += "<div class=\"mdl-card__title\">";
+                    content += "<div class=\"mdl-card mdl-shadow--2dp demo-mdl-card--horizontal mdl-color-text--blue-grey-700 mdl-color--grey-300\">";
+                    content += "<div class=\"mdl-card__title mdl-color-text--blue-grey-700\">";
                     content += "<h2 class=\"mdl-card__title-text\">"+child_data.name+"</h2>";
                     content += "</div>";
-                    content += "<div class=\"mdl-card__supporting-text\">"+"child_data.desc"+"</div>";
+                    content += "<div class=\"mdl-card__supporting-text mdl-color-text--blue-grey-700\">"+child_data.desc+"</div>";
                     content += "<div class=\"mdl-card__actions mdl-card--border\">";
-                    content += "<a class=\"mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect\" data-upgraded=\",MaterialButton,MaterialRipple\">Download</a>";
+                    content += "<a class=\"mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--blue-grey-700\" data-upgraded=\",MaterialButton,MaterialRipple\">Download</a>";
+                    content += "</div>";
+                    content += "<div class=\"mdl-card__menu\">";
+                    content += "<button style=\"background-color:#FFD600; border-radius:2px; border: 1px solid #546E7A; outline: none;\" class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, -1)\"> + </button>";
+                    content += "&nbsp;"+disp_votes+"&nbsp;";
+                    content += "<button style=\"background-color:#FFD600; border-radius:2px; border: 1px solid #546E7A; outline: none;\" class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, 1)\"> - </button>";
                     content += "</div>";
                     content += "</div>";
                     content += "</div>";
