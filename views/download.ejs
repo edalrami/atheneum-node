@@ -36,17 +36,13 @@ limitations under the License.
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     
    
-    <!-----REMODAL------->
+    <!-----REMODAL...IAN COPY THISL------->
     <link rel="stylesheet" href="/remodal.css">
     <link rel="stylesheet" href="/remodal-default-theme.css">
     <script src="/remodal.min.js"></script>
     
     <!------WEB3-------->
     <script src="/web3.js"></script>
-    
-    <!-----left pad---->
-     <script src="/leftpad.js"></script>
-    
 
    <!------Initialize Firebase------>
     <script>
@@ -96,16 +92,16 @@ limitations under the License.
             <a class="mdl-navigation__link mdl-color-text--yellow-A700" id="sign_out">Sign Out</a>
         </nav>
     </div>
-    <main class="mdl-layout__content mdl-color--blue-grey-800">
+    <main class="mdl-layout__content mdl-color--grey-100">
         
         <!-- "All" tab -->
-        <section class="mdl-layout__tab-panel is-active mdl-color-text--grey-600 mdl-color--blue-grey-800" id="scroll-tab-1">
+        <section class="mdl-layout__tab-panel is-active mdl-color--grey-100 mdl-color-text--blue-grey-500" id="scroll-tab-1">
             <div class="page-content">
-            <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color-text--grey-600 mdl-color--blue-grey-500">
-              <div class="mdl-card__title mdl-color--blue-grey-500 mdl-color-text--yellow-A700 ">
+            <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color--grey-100 mdl-color-text--blue-grey-500">
+              <div class="mdl-card__title mdl-color--grey-100 mdl-color-text--blue-grey-500 ">
                 <h2 class="mdl-card__title-text">Available Files:</h2>
               </div>
-              <div class="mdl-card__supporting-text mdl-color-text--grey-600 mdl-color--blue-grey-500" id="messagesDiv">
+              <div class="mdl-card__supporting-text mdl-color--grey-100 mdl-color-text--blue-grey-500" id="messagesDiv">
                 <div id="file_list_All">
                   <p> </p>
                 </div>
@@ -115,12 +111,12 @@ limitations under the License.
                 <div class="remodal" data-remodal-id="modal">
                     <button data-remodal-action="close" class="remodal-close"></button>
                     <h1>Confirm Download</h1>
-                    <p>Please enter your Ethereum Wallet Address:</p>
-                    <input type="text" id="downloaderAddress" name="walletAddress">
+                    <p>File Description:</p>
+                    <p id="the_description"></p>
                     <br>
                     <br>
                     <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
-                    <button id ="downloadButton"data-remodal-action="confirm" class="remodal-confirm">Download</button>
+                    <button id ="downloadButton"data-remodal-action="confirm" class="remodal-confirm">Purchase</button>
                 </div>
                 
                 <!--------Modal Download Link Popup---------->
@@ -139,11 +135,11 @@ limitations under the License.
         <section class="mdl-layout__tab-panel" id="scroll-tab-2">
             <div class="page-content">
                  <div class="page-content">
-                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color-text--grey-600 mdl-color--blue-grey-500">
-              <div class="mdl-card__title mdl-color--blue-grey-500 mdl-color-text--yellow-A700 ">
+                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color--grey-100 mdl-color-text--blue-grey-500">
+              <div class="mdl-card__title mdl-color--grey-100 mdl-color-text--blue-grey-500 ">
                 <h2 class="mdl-card__title-text">Available Files:</h2>
               </div>
-              <div class="mdl-card__supporting-text mdl-color-text--grey-600 mdl-color--blue-grey-500" id="messagesDiv">
+              <div class="mdl-card__supporting-text mdl-color--grey-100 mdl-color-text--blue-grey-500" id="messagesDiv">
                 <div id="file_list_History">
                   <p> </p>
                 </div>
@@ -155,11 +151,11 @@ limitations under the License.
         <!-- "Literature" tab -->
         <section class="mdl-layout__tab-panel" id="scroll-tab-3">
             <div class="page-content"><div class="page-content">
-                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color-text--grey-600 mdl-color--blue-grey-500">
-              <div class="mdl-card__title mdl-color--blue-grey-500 mdl-color-text--yellow-A700 ">
+                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color--grey-100 mdl-color-text--blue-grey-500">
+              <div class="mdl-card__title mdl-color--grey-100 mdl-color-text--blue-grey-500 ">
                 <h2 class="mdl-card__title-text">Available Files:</h2>
               </div>
-              <div class="mdl-card__supporting-text mdl-color-text--grey-600 mdl-color--blue-grey-500" id="messagesDiv">
+              <div class="mdl-card__supporting-text mdl-color--grey-100 mdl-color-text--blue-grey-500" id="messagesDiv">
                 <div id="file_list_Literature">
                   <p> </p>
                 </div>
@@ -171,11 +167,11 @@ limitations under the License.
         <section class="mdl-layout__tab-panel" id="scroll-tab-4">
             <div class="page-content">
                  <div class="page-content">
-                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color-text--grey-600 mdl-color--blue-grey-500">
-              <div class="mdl-card__title mdl-color--blue-grey-500 mdl-color-text--yellow-A700 ">
+                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color--grey-100 mdl-color-text--blue-grey-500">
+              <div class="mdl-card__title mdl-color--grey-100 mdl-color-text--blue-grey-500 ">
                 <h2 class="mdl-card__title-text">Available Files:</h2>
               </div>
-              <div class="mdl-card__supporting-text mdl-color-text--grey-600 mdl-color--blue-grey-500" id="messagesDiv">
+              <div class="mdl-card__supporting-text mdl-color--grey-100 mdl-color-text--blue-grey-500" id="messagesDiv">
                 <div id="file_list_Chemistry">
                   <p> </p>
                 </div>
@@ -188,11 +184,11 @@ limitations under the License.
         <section class="mdl-layout__tab-panel" id="scroll-tab-5">
             <div class="page-content">
                 <div class="page-content">
-                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color-text--grey-600 mdl-color--blue-grey-500">
-              <div class="mdl-card__title mdl-color--blue-grey-500 mdl-color-text--yellow-A700 ">
+                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color--grey-100 mdl-color-text--blue-grey-500">
+              <div class="mdl-card__title mdl-color--grey-100 mdl-color-text--blue-grey-500 ">
                 <h2 class="mdl-card__title-text">Available Files:</h2>
               </div>
-              <div class="mdl-card__supporting-text mdl-color-text--grey-600 mdl-color--blue-grey-500" id="messagesDiv">
+              <div class="mdl-card__supporting-text mdl-color--grey-100 mdl-color-text--blue-grey-500" id="messagesDiv">
                 <div id="file_list_Music">
                   <p> </p>
                 </div>
@@ -204,11 +200,11 @@ limitations under the License.
         <!-- "Art" tab -->
         <section class="mdl-layout__tab-panel" id="scroll-tab-6">
             <div class="page-content"><div class="page-content">
-                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color-text--grey-600 mdl-color--blue-grey-500">
-              <div class="mdl-card__title mdl-color--blue-grey-500 mdl-color-text--yellow-A700 ">
+                <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--12-col mdl-cell--12-col-tablet mdl-cell--12-col-desktop mdl-color--grey-100 mdl-color-text--blue-grey-500">
+              <div class="mdl-card__title mdl-color--grey-100 mdl-color-text--blue-grey-500 ">
                 <h2 class="mdl-card__title-text">Available Files:</h2>
               </div>
-              <div class="mdl-card__supporting-text mdl-color-text--grey-600 mdl-color--blue-grey-500" id="messagesDiv">
+              <div class="mdl-card__supporting-text mdl-color--grey-100 mdl-color-text--blue-grey-500" id="messagesDiv">
                 <div id="file_list_Art">
                   <p> </p>
                 </div>
@@ -231,6 +227,9 @@ limitations under the License.
     var global_child;     //Variable to store file id
     var transaction_receipt;
     
+    var buyer_address;
+    var seller_address;
+    
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
           // User is signed in.
@@ -251,107 +250,6 @@ limitations under the License.
          web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/JZ2u24KnqTjj0qNuNXKk"));
     }    
     
-    
-    //Address of the current solidity contract deployed the ethereum testnet blockchain
-    var contractAddress = "0x8497ca7a710675b527a777cef5d868f04d4f5609";
-    
-    
-    //Declare Application Binary Interface. Allows for interaction
-    //with solidity contract. Makes transactions readable. 
-    //Note: See atheneum.sol for the contracts being used and the
-    //defined functions handling transactions from the blockchain. 
-  var ABI = [{
-                "constant": true,
-                "inputs": [],
-                "name": "seller",
-                "outputs": [{
-                    "name": "",
-                    "type": "address"
-                }],
-                "payable": false,
-                "type": "function"
-            }, {
-                "constant": false,
-                "inputs": [],
-                "name": "abort",
-                "outputs": [],
-                "payable": false,
-                "type": "function"
-            }, {
-                "constant": true,
-                "inputs": [],
-                "name": "value",
-                "outputs": [{
-                    "name": "",
-                    "type": "uint256"
-                }],
-                "payable": false,
-                "type": "function"
-            }, {
-                "constant": true,
-                "inputs": [],
-                "name": "buyer",
-                "outputs": [{
-                    "name": "",
-                    "type": "address"
-                }],
-                "payable": false,
-                "type": "function"
-            }, {
-                "constant": false,
-                "inputs": [],
-                "name": "confirmReceived",
-                "outputs": [],
-                "payable": false,
-                "type": "function"
-            }, {
-                "constant": true,
-                "inputs": [],
-                "name": "state",
-                "outputs": [{
-                    "name": "",
-                    "type": "uint8"
-                }],
-                "payable": false,
-                "type": "function"
-            }, {
-                "constant": false,
-                "inputs": [],
-                "name": "confirmPurchase",
-                "outputs": [],
-                "payable": true,
-                "type": "function"
-            }, {
-                "inputs": [],
-                "payable": true,
-                "type": "constructor"
-            }, {
-                "anonymous": false,
-                "inputs": [],
-                "name": "Aborted",
-                "type": "event"
-            }, {
-                "anonymous": false,
-                "inputs": [],
-                "name": "PurchaseConfirmed",
-                "type": "event"
-            }, {
-                "anonymous": false,
-                "inputs": [],
-                "name": "ItemReceived",
-                "type": "event"
-            }]
-   
-   
-   //Create Web3 Contract object with ABI array
-   //Essentially this defines a contract object with the current functions defined
-   //in the ABi array
-    var myContract = web3.eth.contract(ABI);
-
-    //Instantiate contract from an existing address. 
-    //This takes myContract and uses the contract object myContract
-    //and searches for a contract at a specified address on the tesnet blockchain
-    var contractInstance = myContract.at(contractAddress);
 
     //Display list of files uploaded
     window.onload = function() {
@@ -380,6 +278,32 @@ limitations under the License.
             pull_db("Art");
             console.log("Art pressed"); 
         });
+     
+        
+    }
+    
+   
+    // delete this?
+    function clear_file_list(category) {
+        var file_list = document.getElementById('file_list'+category);
+        if(file_list != null) {
+            console.log(file_list);
+            file_list.innerHTML = "";
+        }
+        else {
+            console.log("file_list_"+category+" is null");
+        }
+    }
+    
+    // delete this?
+    function clear_all_tabs() {
+        clear_file_list("All");
+        clear_file_list("History");
+        clear_file_list("Literature");
+        clear_file_list("Chemistry");
+        clear_file_list("Music");
+        clear_file_list("Art");
+        clear_file_list("Other");
     }
 
     //Access the firebase DB and return all files that have the same category as the argument
@@ -392,6 +316,7 @@ limitations under the License.
             snapshot.forEach(function(child) {
                 var child_key = child.key;
                 var child_data = child.val();
+                var disp_votes = (-1)*child_data.upvotes;
                 //add buttons 
                 var up = "up";
                 var down = "down";
@@ -399,18 +324,18 @@ limitations under the License.
                     console.log("There was a match with the tag: " + tag);
                     //orderByChild by default orders the DB in ascending order, so as the votecount increases, it will move down the list
                     file_list.innerHTML = file_list.innerHTML + "<button class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, -1)\"> + </button>";
-                    file_list.innerHTML = file_list.innerHTML + "&nbsp; &nbsp;";
+                    file_list.innerHTML = file_list.innerHTML + "&nbsp; "+disp_votes+" &nbsp; ";
                     file_list.innerHTML = file_list.innerHTML + "<button class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, 1)\"> - </button>";
                     file_list.innerHTML = file_list.innerHTML + '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;';
                     //display the file names and have them link to their cloud storage location
-                    //file_list.innerHTML = file_list.innerHTML + '<a href="#modal' + child_data.loc + '">' + child_data.name;
-                    file_list.innerHTML = file_list.innerHTML + '<a id =\"'+child_key+'\" onClick=\"displayModal(this.id)\">'+ child_data.name;
+                    //file_list.innerHTML = file_list.innerHTML + '<a href="#modal' + child_data.loc + '" style=\"text-color:#f5f5f5\" >' + child_data.title;
+                    file_list.innerHTML = file_list.innerHTML + '<a id =\"'+child_key+'\" style=\"color:#607B8D\" onClick=\"displayModal(this.id)\">'+ child_data.title;
                     file_list.innerHTML = file_list.innerHTML + '<br>';
                 }
             })
         });
     }
-
+    
     //Change the votes value of a specific file
     function vote(key, vote){
         var db_ref = firebase.database().ref("files/"+key);
@@ -451,7 +376,8 @@ limitations under the License.
             }
             
             if (match) {
-                var new_count = snapshot.val().upvotes + vote; 
+                var new_count = snapshot.val().upvotes + vote;
+                window.location = "../download"
             } else {
                 new_count = snapshot.val().upvotes;
                 console.log("User has not purchased the file, or has already voted.  Vote Rejected.")
@@ -464,7 +390,8 @@ limitations under the License.
                 'category': snapshot.val().category,
                 'desc': snapshot.val().desc,
                 'upvotes': new_count,
-                'download_list': new_dl_list
+                'download_list': new_dl_list,
+                'title': snapshot.val().title
             });
         console.log(snapshot.val().upvotes);
         });
@@ -477,7 +404,12 @@ limitations under the License.
       console.log("MODAL IS DISPLAYING")
       get_user_info(current_user);
       global_child = child;
+      var dl_ref = firebase.database().ref("files/"+global_child);
+      dl_ref.once("value").then(function(snapshot) {
+          dname = snapshot.val().desc;
+          $("#the_description").text(dname);
       console.log("global_child: "+global_child);
+      });
     }
     
     function display_download() {
@@ -493,22 +425,61 @@ limitations under the License.
                 dl = document.getElementById("download_link");
                 dl.innerHTML = "<a href=\""+url+"\" download>Click here to download</a>";
                 dl.innerHTML = dl.innerHTML + "&nbsp; &nbsp;";
-                dl.innerHTML = dl.innerHTML + "<a href=https://ropsten.etherscan.io/tx/"+ transaction_receipt + ">Confirmation Receipt</a>";
+                dl.innerHTML = dl.innerHTML + "<a href=https://rinkeby.etherscan.io/tx/"+ transaction_receipt + ">Confirmation Receipt</a>";
                 //dl.setAttribute("href", url);
             });
         });
     }
     
+    function set_buyer_address(addr) {
+        buyer_address = addr;
+        console.log('buyer_address set to: ' + buyer_address)
+    }
+    
+    function set_seller_address(addr) {
+        seller_address = addr;
+        console.log('seller address set to: ' + seller_address)
+    }
+    
     $("#downloadButton").click(function() {
-      if($("#downloaderAddress").val() != null){
           //USER MUST BE LOGGED IN TO METAMASK
-          var buyer_address = "0x766e03463bA84d870B84a90f4Be761f35F71c1a0";
-          var seller_address = "0xDF56f2CD41D5AB7caaE414B4C7Adc75a3C4500c2"; //This needs to be fileowner address
+          
+          // get buyer address
+          
+          var database_copy = firebase.database();
+          console.log("looking for user with email: " + current_user);
+          found = false;
+          var users_ref = database_copy.ref("users");
+          users_ref.once('value').then(function(snapshot) {
+              snapshot.forEach(function(child) {
+                  var child_key = child.key;
+                  var child_data = child.val();
+                  if(child_data.email == current_user) {
+                    
+                      // Match has been found
+                      console.log("Match found!");
+                    
+                      set_buyer_address(child_data.wallet_addr);
+                      user_password = child_data.wallet_pass;
+                    
+                      console.log("Wallet Address: " + buyer_address);
+                      //console.log("Wallet Password: " + user_password);
+                  }
+              })
+          })
+          
+          // get seller address
+          
+          var files_ref = database_copy.ref("files/"+global_child);
+          files_ref.once('value').then(function(snapshot) {
+              set_seller_address(snapshot.val().owner);
+          })
+          
           console.log("BUYER: " + buyer_address)
           console.log("SELLER: " + seller_address)
           
           
-          web3.eth.sendTransaction({from: user_wallet, to: seller_address, value: web3.toWei(0.05, "ether") }, 
+          web3.eth.sendTransaction({from: buyer_address, to: seller_address, value: web3.toWei(0.05, "ether") }, 
           function(err,res){
               if(!err){
                   console.log("Confirmation Receipt: " + res)
@@ -519,7 +490,7 @@ limitations under the License.
               }
           });
 
-      }
+      
        
          //add_downloader(current_user, global_child)
          
@@ -602,6 +573,7 @@ limitations under the License.
                 'category': snapshot.val().category,
                 'desc': snapshot.val().desc,
                 'upvotes': snapshot.val().upvotes,
+                'title': snapshot.val().title,
                 'download_list': new_dl_list
             });
         });
@@ -647,6 +619,7 @@ limitations under the License.
             })
         })
     }
+    
 
 </script>
 </body>

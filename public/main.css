@@ -24,10 +24,27 @@
   height: 40px;
 }
 
-.mdl-card {
-  overflow: auto;
-  height: 600px;
+.mdl-card--horizontal {
+  flex-direction: column;
+  height: 1vh;
+  padding-left: 150px;
+  width: 100%;
+  .mdl-card__media {
+    left: 0;
+    position: absolute;
+    width: 150px;
+  }
+  .mdl-card__supporting-text {
+    flex: 1 1 auto;
+    width: auto;
+  }
 }
+.mdl-card + .mdl-card {
+  margin-top: 40px;
+}
+
+
+
 
 .file_input {
   float: left;
@@ -46,11 +63,13 @@
 }
 
 #upload_mdl_card {
-  height: 600px;
+  overflow: auto;
+  height: 525px;
+  margin-top: 2px;
 }
 
 #upload_subject {
-  height: 250px;
+  height: 170px;
 }
 
 .none {
@@ -96,3 +115,39 @@
     bottom: 20px;
 	z-index: 9999;
 }
+
+#tutorial_content{
+  margin: auto;
+  max-width: 800px;
+  padding: 30px;
+}
+
+#tutorial_content h1{
+  margin-top: 20px;
+}
+
+#tutorial_content p{
+  font-size: 24px;
+}
+
+#tutorial_content a{
+  color: #607d8b;
+  text-decoration: none;
+}
+
+#tutorial_content a:hover{
+  text-decoration: underline;
+}
+
+#page-content{
+ background-color: #f5f5f5; 
+}
+
+body{
+  background-color: #f5f5f5;
+}
+
+#project_logo{
+  
+}
+

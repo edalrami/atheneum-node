@@ -34,7 +34,7 @@ limitations under the License.
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   
   
-  <!-----REMODAL------->
+  <!-----REMODAL----- -->
   <link rel="stylesheet" href="/remodal.css">
   <link rel="stylesheet" href="/remodal-default-theme.css">
   <script src="/remodal.min.js"></script>
@@ -84,7 +84,7 @@ limitations under the License.
     </nav>
   </div>
   <main class="mdl-layout__content">
-    <div class="page-content">
+    <div id="page-content">
       
       
        <!--------Modal Popup for Login---------->
@@ -96,8 +96,10 @@ limitations under the License.
                     <br>
                     <input type="password" id="login_password" placeholder="password" /><br/>
                     <br>
+                    <p>Don't have an account? Click Sign Up</p>
                     <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
                     <button id ="confirm_login"data-remodal-action="confirm" class="remodal-confirm">Login</button>
+                    <button id ="signup_redirect" data-remodal-action="confirm" class="remodal-signup">Sign Up</button>
                 </div>
                 
        <!--------Modal Popup for Signup---------->
@@ -118,28 +120,49 @@ limitations under the License.
                     </div>
                     <br>
                     <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
-                    <button id ="confirm_signup"data-remodal-action="confirm" class="remodal-confirm">Sign Up</button>
+                    <button id ="confirm_signup"data-remodal-action="confirm" class="remodal-confirm">Create</button>
                 </div>
       
       
-      
-      <h1 id = "atheneum_setup" align = "center">Required Atheneum Setup:</h1>
-      <p id = "tutorial_outline">
-        <h3 class = "tutorial_headers" align = "center"></br></br>1. Create an Account to access the Upload and Browse Pages.</br></br>
-          2. Download and setup MetaMask: <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en">Here</a></br></br>
-          3. Purchase Ether or obtain Testnet Ether via faucet.
-        </h3>
-      </p>
-      
+      <div id="tutorial_content">
+        <h1 id = "project_logo" align = "center">Welcome to Atheneum </br> <img src = "/atheneumLogo.JPG" width = "300" height = "350"></h1>
+        <h2 id = "atheneum_setup" align = "center">Required Atheneum Setup</h2>
+        <p id = "tutorial_outline">
+          <h3>1. Create an Ethereum Wallet on MetaMask: </br> <img src = "/metamask.JPG" width = "800" height = "250"> </h3>
+          <p>
+              1a. Setting up your account is easy.  In order to create an account, you will need an Ethereum wallet to buy and sell documents.  This is made easy with MetaMask, a simple and easy chrome plug-in for handling Ethereum Wallets.  Click <a href="https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn?hl=en" target="_blank">HERE</a> to install Metamask. Remember your password, and store your recovery info somewhere safe.
+          </p>
+          <p>
+              1b. Once you've registered, you'll need to configure the testnet setings to the Rinkeby testnet. To do this, click the testnet icon in the upper left corner of MetaMask, and select the Ropsten testnet.
+          </p>
+          <h3 align = "center"><img src = "/testnet.JPG" width = "300" height = "400"></h3>
+            
+            <h3>2. Create Atheneum Account</h3>
+            <p>
+              2a. Now you ready to create your Atheneum account. When creating your Atheneum account, you will be prompted to enter four items: Your email, your chosen Atheneum password, your MetaMask wallet address, and your MetaMask password. This will be the only time you enter your MetaMask information for our records. For security reasons, do not make your Atheneum password and MetaMask wallet password the same.
+            </p>
+            <h3 align = "center"><img src = "/createaccount.JPG" width = "400" height = "200"></h3>
+            <p>To enter your MetaMask wallet address simply click the copy icon and paste it into the corresponding text field when registering your account.</p>
+            <h3 align = "center"><img src = "/copyaddress.JPG" width = "300" height = "400"></h3>
+            <p>
+              2b. Now that you are logged in, you can upload and download files through the Upload and Browse tabs in the navigation bar. Since you are on the Rinkeby Test Network, you won't ever have to spend real money.  However, if you are in need of Testnet Ether, you can always get more through the <a href="https://www.rinkeby.io/" target="_blank">RINKEBY TESTNET ETHER FAUCET</a>.  
+            </p>
+            
+            <h3>3. Get Testnet Ether</h3>
+            <p>3a. In order to get Testnet Ether from the Rinkeby faucet you need to create a Github gist file that contains your MetaMask wallet address. You can create a Github gist file <a href="https://gist.github.com/" target="_blank">HERE</a></p>
+            <h3 align = "center"><img src =  "/gist.JPG" width = "600" height = "300"></h3>
+            <p>3b. Finally, once you've published your gist file. Paste the URL link of your Github gist file into the faucet text field, and you should receive Testnet Ether shortly. You now have Testnet Ether to use on Atheneum!</p>
+            <h3 align = "center"><img src = "faucet.JPG" width = "550" height = "200"></h3>
+            
+          
+        </p>
         <h3 class = "tutorial_headers" align = "center"></h3>
-        
-        
-      
     </div>
   </main>
 </div>
 
 <script>
+    
             $("#login_button").click(function() {
                 var inst = $('[data-remodal-id=modal]').remodal();
                 inst.open();
@@ -151,7 +174,6 @@ limitations under the License.
                 inst.open();
                 console.log("MODAL IS DISPLAYING")
             })
-            
             
   
             $("#confirm_signup").click(function(){
@@ -177,6 +199,16 @@ limitations under the License.
                     console.log(errorMessage);
                 });
             });
+            
+            
+             $("#signup_redirect").click(function() {
+                var inst = $('[data-remodal-id=modal2]').remodal();
+                inst.open();
+                console.log("MODAL IS DISPLAYING")
+            })
+            
+            
+            
             
             $("#sign_out").click(function() {
               console.log("signing out");

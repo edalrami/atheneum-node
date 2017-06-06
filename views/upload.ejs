@@ -130,6 +130,10 @@ limitations under the License.
                                                 </ul>
                                         </div>
                                         <!-- Title Textfield -->
+                                        <div class="mdl-textfield mdl-js-textfield" id="upload_title">
+                                            <input class="mdl-textfield__input" type="text" id="file_title" />
+                                            <label class="mdl-textfield__label" for="file_title">Title</label>
+                                        </div>
                                         <!-- Description Textfield -->
                                         <div class="mdl-textfield mdl-js-textfield" id="upload_desc">
                                             <input class="mdl-textfield__input" type="text" id="file_description" />
@@ -168,10 +172,12 @@ limitations under the License.
     var user = firebase.auth().currentUser;
     var current_user;
     
+    
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
           // User is signed in.
           current_user = user.email;
+          
       } else {
             // No user is signed in.
             window.location = "../#modal"
@@ -200,17 +206,48 @@ limitations under the License.
     //db_upload is called when the "Send it" button is pressed
     //Actually pushes the file to the database and cloud storage
     function db_upload() {
+        console.log("db_upload called");
         var uploader;
         if(user != null) {
             uploader = user.email;
         }
         else {
+            // This should never occur
             uploader = "anonymous";
         }
+        console.log("uploader set");
+        
+        // Get the uploader's wallet address
+        
+        var database_copy = firebase.database();
+        console.log("db copy made");
+        console.log("looking for user with email: " + current_user);
+        found = false;
+        var users_ref = database_copy.ref("users");
+        users_ref.once('value').then(function(snapshot) {
+            snapshot.forEach(function(child) {
+                var child_key = child.key;
+                var child_data = child.val();
+                if(child_data.email == current_user) {
+                    
+                    // Match has been found
+                    //console.log("Match found!");
+                    
+                    current_user_address = child_data.wallet_addr;
+                    user_password = child_data.wallet_pass;
+                    
+                    console.log("Wallet Address: " + current_user_address);
+                    //console.log("Wallet Password: " + user_password);
+                }
+            })
+        })
+        
         console.log(upload_file);
         console.log("subject = "+subject);
         //Not sure why, but this crashes 100% of the time without this if statement...
-        if(!upload_file) {};
+        if(!upload_file) {
+            db_upload();
+        };
       // Push to child path.
         storageRef.child('testUploads/' + upload_file.name).put(upload_file, metadata).then(function(snapshot) {
             console.log('Uploaded', snapshot.totalBytes, 'bytes.');
@@ -222,16 +259,42 @@ limitations under the License.
                 'name': upload_file.name,
                 'loc': url,
                 'upvotes': 0,
-                'owner': current_user,
+                'owner': current_user_address,
                 'category': subject,
+                'title': document.getElementById('file_title').value,
                 'desc': document.getElementById('file_description').value,
                 'download_list': ';'
             });
             console.log('File available at', url);
+            window.location="../download";
             database.ref()
         }).catch(function(error) {
             console.error('Upload failed:', error);
            });
+    }
+    
+    function get_user_address(email) {
+        var database_copy = firebase.database();
+        console.log("looking for user with email: " + email);
+        found = false;
+        var users_ref = database_copy.ref("users");
+        users_ref.once('value').then(function(snapshot) {
+            snapshot.forEach(function(child) {
+                var child_key = child.key;
+                var child_data = child.val();
+                if(child_data.email == email) {
+                    
+                    // Match has been found
+                    console.log("Match found!");
+                    
+                    current_user_address = child_data.wallet_addr;
+                    user_password = child_data.wallet_pass;
+                    
+                    console.log("Wallet Address: " + user_wallet);
+                    //console.log("Wallet Password: " + user_password);
+                }
+            })
+        })
     }
 
 

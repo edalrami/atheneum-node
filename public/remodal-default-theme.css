@@ -140,7 +140,8 @@
 /* Dialog buttons */
 
 .remodal-confirm,
-.remodal-cancel {
+.remodal-cancel,
+.remodal-signup{
   font: inherit;
 
   display: inline-block;
@@ -164,6 +165,18 @@
 .remodal-confirm {
   color: #fff;
   background: #81c784;
+}
+
+.remodal-signup {
+  color: #fff;
+  background: #4177f4;
+}
+
+
+.remodal-signup:hover
+.remodal-signup:focus {
+  color: #fff;
+  background: #426bf4;
 }
 
 .remodal-confirm:hover,

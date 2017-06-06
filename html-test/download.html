@@ -219,6 +219,8 @@ limitations under the License.
 
     //Access the firebase DB and return all files that have the same category as the argument
     function pull_db(tag) {
+        var lit = document.getElementById('file_list_Literature');
+        lit.innerHTML = "";
         var file_list = document.getElementById('file_list_'+tag);
         file_list.innerHTML = "";
         //.once polls the database one time
@@ -246,7 +248,7 @@ limitations under the License.
                     content += "<div class=\"mdl-card__supporting-text mdl-color-text--blue-grey\">"+child_data.desc+"</div>";
                     content += "<div class=\"mdl-layout-spacer\"></div>";
                     content += "<div class=\"mdl-card__actions mdl-card--border\">";
-                    content += "<a class=\"mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--blue-grey\" data-upgraded=\",MaterialButton,MaterialRipple\">Download</a>";
+                    content += "<a id =\"'+child_key+'\" onClick=\"displayModal(this.id)\" class=\"mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect mdl-color-text--blue-grey\" data-upgraded=\",MaterialButton,MaterialRipple\">Download</a>";
                     content += "</div>";
                     content += "</div>";
                     content += "</div>";
