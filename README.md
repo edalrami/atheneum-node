@@ -4,10 +4,6 @@ Link to old repository [here](https://github.com/thraxxed/CryptocurrencyTracker)
 
 
 Essentials to the Project:
-
-    node_modules: Folder containing imported node packages used throughout project. 
-                  Subfolders and packages used include: ejs, firebase-admin, express,
-                  express session, dotenv, getmdl-select, mdl-selectfield, remodal, and web3.
                   
     public: Folder containing all css files, JavaScript files, and images that are viewable
             on the client side of the app.
@@ -66,6 +62,7 @@ Essentials to the Project:
     Sprint3Plan.pdf: Plan for sprint 3
     
     Sprint3Report.pdf: Summary of sprint 3
+    
 
 
 NON-Essential:
