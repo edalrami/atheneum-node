@@ -444,7 +444,7 @@ limitations under the License.
     $("#downloadButton").click(function() {
           //USER MUST BE LOGGED IN TO METAMASK
           
-          // get buyer address
+          // get buyer address (buyer is the currently logged in user)
           
           var database_copy = firebase.database();
           console.log("looking for user with email: " + current_user);
@@ -468,7 +468,8 @@ limitations under the License.
               })
           })
           
-          // get seller address
+          // get seller address 
+          //(owner field of the file in DB is the uploader's wallet address)
           
           var files_ref = database_copy.ref("files/"+global_child);
           files_ref.once('value').then(function(snapshot) {
@@ -482,6 +483,8 @@ limitations under the License.
           web3.eth.sendTransaction({from: buyer_address, to: seller_address, value: web3.toWei(0.05, "ether") }, 
           function(err,res){
               if(!err){
+                  // Transaction has finished successfuly,
+                  // allow user to download the file.
                   console.log("Confirmation Receipt: " + res)
                   transaction_receipt = res;
                   provide_download();
@@ -489,10 +492,6 @@ limitations under the License.
                   console.log("Transaction Failed: " + err)
               }
           });
-
-      
-       
-         //add_downloader(current_user, global_child)
          
     });
     
@@ -507,17 +506,6 @@ limitations under the License.
         // Get the download URL
         file_ref.getDownloadURL().then(function(url) {
             document.getElementById("download_link").innerHTML("<a href=\""+url+"\" download>Click here to download</a>")
-            // var xhr = new XMLHttpRequest();
-            // xhr.responseType = 'blob';
-            // xhr.onload = function(event) {
-            //     var blob = xhr.response;
-            // };
-            //xhr.open('GET', url);
-            //window.location.href=url;
-            //if (window.confirm('Click to continue to file')) {
-            //    window.location.href=url;
-            //};
-            //xhr.send();
         }).catch(function(error) {
             switch (error.code) {
                 case 'storage/object_not_found':
@@ -544,6 +532,12 @@ limitations under the License.
         dl_ref.once("value").then(function(snapshot) {
             
             var match = false;
+            
+            //Split the current download list, which is a string
+            //of values separated by semicolons, into an array.
+            //Every email in the array will be followed by an
+            //integer representing that user's vote on the file.
+            
             var user_list = snapshot.val().download_list.split(";");
             if(user_list.length == 1) {
                 match = false;
@@ -583,7 +577,7 @@ limitations under the License.
     $("#sign_out").click(function() {
               console.log("signing out");
               firebase.auth().signOut().then(function(){
-                    //signed out successful
+                    //signed out successfuly
                     $("main").html("Signed out");
                 }).catch(function(error){
                     //something went wrong

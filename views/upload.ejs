@@ -157,7 +157,6 @@ limitations under the License.
 </div>
 
 <script>
-    console.log("updatedWow");
     //create refs to various firebase components
     var file_list = document.getElementById('file_list');
     var auth = firebase.auth();
@@ -177,9 +176,9 @@ limitations under the License.
       if (user) {
           // User is signed in.
           current_user = user.email;
-          
       } else {
             // No user is signed in.
+            // Redirect them to login window on homepage.
             window.location = "../#modal"
       }
     });
@@ -248,7 +247,7 @@ limitations under the License.
         if(!upload_file) {
             db_upload();
         };
-      // Push to child path.
+        // Push to child path.
         storageRef.child('testUploads/' + upload_file.name).put(upload_file, metadata).then(function(snapshot) {
             console.log('Uploaded', snapshot.totalBytes, 'bytes.');
             console.log(snapshot.metadata);
@@ -273,6 +272,7 @@ limitations under the License.
            });
     }
     
+    // Unused function, possibly delete
     function get_user_address(email) {
         var database_copy = firebase.database();
         console.log("looking for user with email: " + email);

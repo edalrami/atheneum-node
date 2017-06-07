@@ -185,6 +185,8 @@ limitations under the License.
                     console.log(errorMessage);
                     $("#errorMessage").html(errorMessage);
                 });
+                // If this account is not in the users DB table 
+                //(it never should be), add them.
                 check_account(email);
             })
                
@@ -225,12 +227,12 @@ limitations under the License.
             });
     });
            
-
+            //Checks if the given email is already a member
+            //of the user table, and if not, add them.
             function check_account(email) {
               var database = firebase.database();
               var user = firebase.auth().currentUser;
               found = false;
-              //db_ref points to the file tab in the DB
               var db_ref = database.ref("users");
               db_ref.once('value').then(function(snapshot) {
                 snapshot.forEach(function(child) {
@@ -264,7 +266,7 @@ limitations under the License.
                 if (user) {
                     // User is signed in.
                     console.log("Signed in");
-                    //window.location = "../download.html";
+                    
                 } else {
                     // No user is signed in.
                     console.log("Not signed in");
