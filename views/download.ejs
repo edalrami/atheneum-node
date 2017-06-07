@@ -36,7 +36,7 @@ limitations under the License.
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     
    
-    <!-----REMODAL...IAN COPY THISL------->
+    <!-----REMODAL------->
     <link rel="stylesheet" href="/remodal.css">
     <link rel="stylesheet" href="/remodal-default-theme.css">
     <script src="/remodal.min.js"></script>
@@ -83,6 +83,7 @@ limitations under the License.
             <a href="#scroll-tab-6" id="Art" class="mdl-layout__tab mdl-color-text--yellow-A700">Art</a>
         </div>
     </header>
+    <!-- Drawer Element for header -->
     <div class="mdl-layout__drawer mdl-color-text--yellow-A700 mdl-color--blue-grey-800">
         <span class="mdl-layout-title mdl-color-text--yellow-A700">Atheneum</span>
         <nav class="mdl-navigation">
@@ -107,7 +108,7 @@ limitations under the License.
                 </div>
               </div>
             </div>
-                 <!--------Modal Popup---------->
+                 <!--------Modal Popup for Purchase---------->
                 <div class="remodal" data-remodal-id="modal">
                     <button data-remodal-action="close" class="remodal-close"></button>
                     <h1>Confirm Download</h1>
@@ -119,7 +120,7 @@ limitations under the License.
                     <button id ="downloadButton"data-remodal-action="confirm" class="remodal-confirm">Purchase</button>
                 </div>
                 
-                <!--------Modal Download Link Popup---------->
+                <!--------Modal for Download and Receipt---------->
                 <div class="remodal" data-remodal-id="modal_dl">
                     <button data-remodal-action="close" class="remodal-close"></button>
                     <p id="download_link">Click here to download</p>
@@ -225,10 +226,9 @@ limitations under the License.
     var user_password;    //Variable to store user's Ethereum wallet password 
     var user_wallet;      //Variable to store user's Ethereum wallet address
     var global_child;     //Variable to store file id
-    var transaction_receipt;
-    
-    var buyer_address;
-    var seller_address;
+    var transaction_receipt; //Variable to store receipt of transaction
+    var buyer_address; //Variable to store address of user
+    var seller_address; //Variable to obtain address of fileowner
     
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
@@ -240,7 +240,6 @@ limitations under the License.
       }
     });
     
-    //NOTE: If you're going to test the server app on heroku then use metamask so it injects web3
     //Initialize web3 instance...if MetaMask is installed as a plugin, then metamask will automaticaly inject web3
     //Otherwise set new web3 provider to the local host. Local host set to heroku app server. 
     if (typeof web3 !== 'undefined') {
@@ -282,29 +281,6 @@ limitations under the License.
         
     }
     
-   
-    // delete this?
-    function clear_file_list(category) {
-        var file_list = document.getElementById('file_list'+category);
-        if(file_list != null) {
-            console.log(file_list);
-            file_list.innerHTML = "";
-        }
-        else {
-            console.log("file_list_"+category+" is null");
-        }
-    }
-    
-    // delete this?
-    function clear_all_tabs() {
-        clear_file_list("All");
-        clear_file_list("History");
-        clear_file_list("Literature");
-        clear_file_list("Chemistry");
-        clear_file_list("Music");
-        clear_file_list("Art");
-        clear_file_list("Other");
-    }
 
     //Access the firebase DB and return all files that have the same category as the argument
     function pull_db(tag) {
@@ -327,7 +303,7 @@ limitations under the License.
                     file_list.innerHTML = file_list.innerHTML + "&nbsp; "+disp_votes+" &nbsp; ";
                     file_list.innerHTML = file_list.innerHTML + "<button class=\"vote\" id=\""+child_key+"\" value=\"off\" onClick=\"vote(this.id, 1)\"> - </button>";
                     file_list.innerHTML = file_list.innerHTML + '&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;';
-                    //display the file names and have them link to their cloud storage location
+                    //display the file names and have them link to popup for purchase
                     //file_list.innerHTML = file_list.innerHTML + '<a href="#modal' + child_data.loc + '" style=\"text-color:#f5f5f5\" >' + child_data.title;
                     file_list.innerHTML = file_list.innerHTML + '<a id =\"'+child_key+'\" style=\"color:#607B8D\" onClick=\"displayModal(this.id)\">'+ child_data.title;
                     file_list.innerHTML = file_list.innerHTML + '<br>';
@@ -397,6 +373,9 @@ limitations under the License.
         });
     }
     
+    
+    //Popup that displays with the file description and
+    //buttons to purchase and cancel
     function displayModal(child){
       console.log(child);
       var inst = $('[data-remodal-id=modal]').remodal();
@@ -412,6 +391,10 @@ limitations under the License.
       });
     }
     
+    //Popup that appears after purchase has been confirmed
+    //Provides download link for direct download
+    //and link to the public transaction receipt
+    //on the Rinkeby Testnet 
     function display_download() {
         var inst = $('[data-remodal-id=modal_dl').remodal();
         inst.open();
@@ -431,16 +414,23 @@ limitations under the License.
         });
     }
     
+    
+    //Sets buyer address
     function set_buyer_address(addr) {
         buyer_address = addr;
         console.log('buyer_address set to: ' + buyer_address)
     }
     
+    
+    //Sets seller address
     function set_seller_address(addr) {
         seller_address = addr;
         console.log('seller address set to: ' + seller_address)
     }
     
+    
+    //When purchase button is clicked
+    //Buyer and seller addresses are obtained
     $("#downloadButton").click(function() {
           //USER MUST BE LOGGED IN TO METAMASK
           
@@ -458,12 +448,8 @@ limitations under the License.
                     
                       // Match has been found
                       console.log("Match found!");
-                    
                       set_buyer_address(child_data.wallet_addr);
                       user_password = child_data.wallet_pass;
-                    
-                      console.log("Wallet Address: " + buyer_address);
-                      //console.log("Wallet Password: " + user_password);
                   }
               })
           })
@@ -476,16 +462,17 @@ limitations under the License.
               set_seller_address(snapshot.val().owner);
           })
           
-          console.log("BUYER: " + buyer_address)
-          console.log("SELLER: " + seller_address)
-          
-          
+          //Initiate transaction and store receipt if successful.
+          //Provide download URL and Link to receipt if purchase is 
+          //successful.
+          //Define cost of purchase as 0.05 Ether
+          //Throw error if transaction failed for any reason
           web3.eth.sendTransaction({from: buyer_address, to: seller_address, value: web3.toWei(0.05, "ether") }, 
           function(err,res){
               if(!err){
                   // Transaction has finished successfuly,
                   // allow user to download the file.
-                  console.log("Confirmation Receipt: " + res)
+                  //console.log("Confirmation Receipt: " + res)
                   transaction_receipt = res;
                   provide_download();
               }else{
@@ -495,6 +482,10 @@ limitations under the License.
          
     });
     
+    
+    //Calls display_download() and provides 
+    //Transaction receipt and download url of the file
+    //that was just purchased
     function provide_download() {
         add_downloader(current_user, global_child);
         display_download();
@@ -573,7 +564,7 @@ limitations under the License.
         });
     }
     
-    
+    //Sign out functionality if signout is clicked
     $("#sign_out").click(function() {
               console.log("signing out");
               firebase.auth().signOut().then(function(){
@@ -588,8 +579,8 @@ limitations under the License.
     });
     
     
-    //(DEBUG) Given an email, print all relevant
-    //fields of that user's account
+    //DO NOT REMOVE
+    //obtain fields of user account
     function get_user_info(email) {
         var database_copy = firebase.database();
         console.log("looking for user with email: " + email);
@@ -606,9 +597,6 @@ limitations under the License.
                     
                     user_wallet = child_data.wallet_addr;
                     user_password = child_data.wallet_pass;
-                    
-                    console.log("Wallet Address: " + user_wallet);
-                    console.log("Wallet Password: " + user_password);
                 }
             })
         })

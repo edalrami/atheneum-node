@@ -96,7 +96,7 @@ limitations under the License.
                     <br>
                     <input type="password" id="login_password" placeholder="password" /><br/>
                     <br>
-                    <p>Don't have an account? Click Sign Up</p>
+                    <p>Note: YOU MUST ALSO BE LOGGED IN TO METAMASK FOR TRANSACTIONS TO WORK </br> Don't have an account? Click Sign Up</p>
                     <button data-remodal-action="cancel" class="remodal-cancel">Cancel</button>
                     <button id ="confirm_login"data-remodal-action="confirm" class="remodal-confirm">Login</button>
                     <button id ="signup_redirect" data-remodal-action="confirm" class="remodal-signup">Sign Up</button>
@@ -162,20 +162,20 @@ limitations under the License.
 </div>
 
 <script>
-    
+            //Displays login popup if login is clicked
             $("#login_button").click(function() {
                 var inst = $('[data-remodal-id=modal]').remodal();
                 inst.open();
-                console.log("MODAL IS DISPLAYING")
             })
             
+            //Displays create accout popup if sign up tab is clicked
             $("#signup_button").click(function() {
                 var inst = $('[data-remodal-id=modal2]').remodal();
                 inst.open();
-                console.log("MODAL IS DISPLAYING")
             })
             
   
+            //Creates account if create is clicked on create account popup
             $("#confirm_signup").click(function(){
                 var email = $('#signup_email').val();
                 var pass = $('#signup_password').val();
@@ -191,7 +191,7 @@ limitations under the License.
             })
                
             
-
+            //Logs a user in
             $("#confirm_login").click(function(){
                 var email = $('#login_email').val();
                 var pass = $('#login_password').val();
@@ -203,15 +203,16 @@ limitations under the License.
             });
             
             
+            //If signup button is clicked on the login popup, redirect to sign up popup
+            //to create account
              $("#signup_redirect").click(function() {
                 var inst = $('[data-remodal-id=modal2]').remodal();
                 inst.open();
-                console.log("MODAL IS DISPLAYING")
             })
             
             
             
-            
+            //Signs a user out and redirects to home page
             $("#sign_out").click(function() {
               console.log("signing out");
               firebase.auth().signOut().then(function(){
