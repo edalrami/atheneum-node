@@ -28,8 +28,8 @@ Essentials to the Project:
             index.ejs: Home page of Atheneum with setup instructions, and login. You cannot
                        access the other pages of Atheneum without signing in.
                        
-            download.ejs: Browse files and users have uploaded already and purchase them if
-                          necessary
+            download.ejs: Browse files users have uploaded and purchase them if
+                          desired
                           
             upload.ejs: Upload your own content to Atheneum.
             
@@ -43,7 +43,7 @@ Essentials to the Project:
                   Testnet Block Chain. Due to difficulties we decided to remove it from handling 
                   transactions, but left it here as a proof of work.
                   
-    CodingStandard,pdf: Outlines are style guildelines for our project
+    CodingStandard.pdf: Outlines are style guildelines for our project
     
     CONTRACT_INFO.txt: This includes the address of where the contract in atheneum.sol is published
                        on the Ethereum Testnet Blockchain and the corresponding ABI to interact with it. 
